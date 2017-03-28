@@ -26,7 +26,7 @@ def get_url_imgs(url_start, year):
 
     url = url_start+str(year)+'/std.html'
     r = request.urlopen(url).read()
-    soup = BeautifulSoup(r, 'lxml')
+    soup = BeautifulSoup(r)
 
     # Find all ahrefs
     links = soup.find_all('a')

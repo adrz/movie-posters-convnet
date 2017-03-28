@@ -4,6 +4,7 @@
 
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+from MulticoreTSNE import MulticoreTSNE as TSNE_multi
 import pandas as pd 
 import numpy as np
 import json
@@ -31,26 +32,40 @@ def scale_coords(coords, width=800, height=800):
     return scaled
 
 
-def process_features(df, pca_components, perplexity, output_file):
+def process_features(df, pca_components, perplexity, n_jobs,output_file, tsne_alg):
+    pca = PCA(n_components=pca_components, whiten=True)
+
+    if tsne_alg=='sklearn':
+        tsne = TSNE(n_components=2, perplexity=perplexity)
+    else:
+        tsne = TSNE_multi(n_components=2, perplexity=perplexity, n_jobs=n_jobs)
+    df = df[df['features'].apply(len) == 4096]
+
     data = np.array(list(df['features']))
 #    images = list(df['images'])
-
-    pca = PCA(n_components=pca_components, whiten=True)
-    tsne = TSNE(n_components=2)
 
     data = pca.fit_transform(data)
     data_tsne = tsne.fit_transform(data)
     scaled_data = scale_coords(data_tsne, width=800, height=800)
 
-    data_json = []
-    for idx, row in df.iterrows():
-        x = scaled_data[idx][0]
-        y = scaled_data[idx][1]
-        data_json.append([x, y, row['local_thumb'], row['local_image']])
+    # data_json = []
+    # for idx, row in df.iterrows():
+    #     print(idx)
+    #     x = scaled_data[idx][0]
+    #     y = scaled_data[idx][1]
+    #     data_json.append([x, y, row['local_thumb'], row['local_image']])
 
+    scaled_data_array = np.array(scaled_data)
+    df_json = pd.DataFrame({'a': scaled_data_array[:,0], 'b': scaled_data_array[:,1],
+                            'c' : df['local_thumb'], 'd': df['local_image']})
     # str_json = 'datasets/xpca.json'
-    json.dump(data_json, open(output_file,'w'))
+    json.dump(df_json.values.tolist(), open(output_file,'w'))
 
+def filter_df(df,n_sample):
+    df_min = df[~df.local_image.str.contains('_ver[2-9]')]
+    df_min = df_min[~df_min.local_image.str.contains('_ver[0-9][0-9]')]
+    df_min = df_min.sample(n_sample)
+    return df_min
 
 def main(argv):
     parser = argparse.ArgumentParser()
@@ -58,11 +73,15 @@ def main(argv):
     parser.add_argument('-o', '--output_file', help="output json file used by d3js", default='./datasets/x.json')
     parser.add_argument('-n', '--pca_components', help="number of PCA components for data reduction", default=1000, type=int)
     parser.add_argument('-p', '--perplexity', help="perplexity for TSNE", default=30, type=int)
+    parser.add_argument('-j', '--n_jobs', help="number of cores to use for the tsne", type=int, default=4)
+    parser.add_argument('-t', '--tsne', help='implementation tsne (multicore/sklearn', default='sklearn')
+    parser.add_argument('-s', '--n_sample', help='number of sample', type=int, default=4000)
     args = parser.parse_args()
 
     df = pickle.load(open(args.input_file,'rb'))
 
-    process_features(df, args.pca_components, args.perplexity, args.output_file)
+    df = filter_df(df, args.n_sample)
+    process_features(df, args.pca_components, args.perplexity,  args.n_jobs, args.output_file, args.tsne)
 
 
 

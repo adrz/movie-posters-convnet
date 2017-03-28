@@ -4,7 +4,6 @@
 
 
 from cnnkeras import *
-from sklearn.manifold import TSNE
 import pandas as pd 
 import sys
 import os
