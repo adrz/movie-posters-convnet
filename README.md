@@ -1,8 +1,7 @@
 
 # Overview
 
-A sample project templated from jacebrowning/template-python.
-
+Unsupervised clustering of movie posters with features extracted from Convolutional Neural Network. Visualization using d3js.
 # Setup
 
 ## Requirements
