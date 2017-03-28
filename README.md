@@ -25,7 +25,7 @@ A sample project templated from jacebrowning/template-python.
 ## Installation
 
 ```sh
-$ git clone https://github.com/
+$ git clone https://github.com/aDrz/movie-posters-cnn.git
 ```
 
 # Usage
