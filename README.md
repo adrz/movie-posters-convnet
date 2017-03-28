@@ -19,7 +19,7 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 * numpy
 * h5py
 * PIL
-
+* d
 
 ## Installation
 
