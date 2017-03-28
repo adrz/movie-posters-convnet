@@ -24,7 +24,7 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 ## Installation
 
 ```sh
-$ git clone https://github.com/aDrz/movie-posters-cnn.git
+$ git clone https://github.com/aDrz/movie-posters-convnet.git
 ```
 
 # Usage
