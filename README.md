@@ -2,6 +2,12 @@
 # Overview
 
 Unsupervised clustering of movie posters with features extracted from Convolutional Neural Network. Visualization using d3js.
+
+This project is divided into 3 main scripts:
+* get-posters.py
+** retrieve the posters from impawards.com.
+** create a thumbnail for each posters for the visualization.
+
 # Setup
 
 ## Requirements
@@ -11,7 +17,7 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 * Python 3.3+
 * ImageMagick
 
-### Package Python
+### Packages Python
 * BeautifulSoup 4.4
 * [Tensorflow 1.0](https://www.tensorflow.org/install/)
 * Keras
@@ -42,10 +48,10 @@ $ ./run-posters-cnn.sh
 
 Then grab a coffee...
 
+## Results
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
 ## Acknowledgments
-
-This project has been highly inspired by:
-
-* 
-* Inspiration
-* etc
