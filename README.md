@@ -114,8 +114,8 @@ Cherry-piking from the top-200 closest couple of posters (relative to cosine dis
 <br><br><br>
 <a href = 'examples/thumb-1030-022.jpg'><img src = 'examples/thumb-300-022.png', hspace="20"></a>
 <a href = 'examples/thumb-1030-023.jpg'><img src = 'examples/thumb-300-023.png', hspace="20"></a>
-<br><br><br>
 </div>
+
 
 ## License
 
