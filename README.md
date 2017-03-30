@@ -19,7 +19,7 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 * numpy
 * h5py
 * PIL
-* d
+* Multicore-TSNE (https://github.com/DmitryUlyanov/Multicore-TSNE)
 
 ## Installation
 
@@ -30,4 +30,6 @@ $ git clone https://github.com/aDrz/movie-posters-convnet.git
 # Usage
 
 After cloning the repos, let's launch:
-
+```sh
+$
+```
