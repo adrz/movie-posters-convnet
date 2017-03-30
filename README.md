@@ -6,6 +6,7 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 
 ## Requirements
 
+### OS
 * Python 3.3+
 * Linux/Unix/OSX (requirement for wget)
 * ImageMagick
