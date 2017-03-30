@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 
 from cnnkeras import *
 import pandas as pd
