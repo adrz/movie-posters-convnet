@@ -1,3 +1,5 @@
+// https://github.com/douglasbagnall/image-tsne
+
 function plot(json, size){
 
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -51,21 +53,12 @@ window.onresize = updateWindow;
 
 function get_dataset(){
     var dataset = window.location.search.substr(1);
-    // if ({ portrait: 1, landscape: 1}[dataset] !== 1){
-    //     dataset = 'x_pca_50_per_100';
-    // }
-    // dataset = 'x_pca_50_per_100'
     return "datasets/" + dataset + ".json";
 }
 
 function get_size(){
     var dataset = window.location.search.substr(1);
-    var lut = {
-        portrait: [32, 50],
-        landscape: [50, 32],
-        square: [40, 40]
-    };
-    return lut[dataset] || lut['square'];
+    return lut[dataset];
 }
 
 d3.json(get_dataset(), function(error, json) {

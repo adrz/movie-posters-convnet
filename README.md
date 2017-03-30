@@ -50,6 +50,7 @@ $ git clone https://github.com/aDrz/movie-posters-convnet.git
 
 # Usage
 
+## Computation
 After cloning you can just launch the bash script that will:
 * download posters from 1920 to 2016
 * compute features
@@ -62,6 +63,16 @@ $ ./run-posters-cnn.sh
 
 Then grab a coffee...
 
+## Visualization
+First install a HTTP server (webfsd):
+```sh
+$ sudo apt-get install webfsd
+```
+
+Then launch index.html into your favorite browser:
+```sh
+$ chromium 127.0.0.1:8000/index.html?data.json
+```
 
 
 ## Results
@@ -72,3 +83,5 @@ Then grab a coffee...
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
+
+* d3js plot: from [https://github.com/douglasbagnall/image-tsne](https://github.com/douglasbagnall/image-tsne)
