@@ -79,7 +79,9 @@ $ chromium 127.0.0.1:8000/index.html?data.json
 Cherry-piking from the top-200 closest posters (relative to cosine distance):
 
 <div align = 'center'>
-<img src = 'examples/thumb-515-000.png'>
+<img src = 'examples/thumb-300-000.png'>
+<img src = 'examples/thumb-300-001.png'>
+<img src = 'examples/thumb-300-002.png'>
 </div>
 ## License
 
