@@ -76,8 +76,11 @@ $ chromium 127.0.0.1:8000/index.html?data.json
 
 
 ## Results
+Cherry-piking from the top-200 closest posters (relative to cosine distance):
 
-
+<div align = 'center'>
+<img src = 'examples/thumb-515-000.png'>
+</div>
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
