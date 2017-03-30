@@ -5,8 +5,8 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 
 This project is divided into 3 main scripts:
 * get-posters.py
-** retrieve the posters from impawards.com.
-** create a thumbnail for each posters for the visualization.
+ * retrieve the posters from impawards.com.
+ * create a thumbnail for each posters for the visualization.
 
 # Setup
 
