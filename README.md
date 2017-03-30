@@ -81,6 +81,7 @@ Cherry-piking from the top-200 closest couple of posters (relative to cosine dis
 <div align = 'center'>
 <img src = 'examples/thumb-300-000.png', hspace="70">
 <img src = 'examples/thumb-300-001.png'>
+<br>
 <img src = 'examples/thumb-300-002.png', hspace="70">
 <img src = 'examples/thumb-300-003.png'>
 </div>
