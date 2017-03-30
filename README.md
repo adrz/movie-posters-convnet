@@ -76,10 +76,10 @@ $ chromium 127.0.0.1:8000/index.html?data.json
 
 
 ## Results
-Cherry-piking from the top-200 closest posters (relative to cosine distance):
+Cherry-piking from the top-200 closest couple of posters (relative to cosine distance):
 
 <div align = 'center'>
-<img src = 'examples/thumb-300-000.png'>
+<img src = 'examples/thumb-300-000.png', hspace="20">
 <img src = 'examples/thumb-300-001.png'>
 <img src = 'examples/thumb-300-002.png'>
 </div>
