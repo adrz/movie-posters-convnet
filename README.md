@@ -7,11 +7,13 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 ## Requirements
 
 ### OS
-* Python 3.3+
 * Linux/Unix/OSX (requirement for wget)
+* Python 3.3+
 * ImageMagick
-* BeautifulSoup
-* Tensorflow 1.0
+
+### Package Python
+* BeautifulSoup 4.4
+* [Tensorflow 1.0](https://www.tensorflow.org/install/)
 * Keras
 * Pandas
 * pickle
@@ -20,9 +22,11 @@ Unsupervised clustering of movie posters with features extracted from Convolutio
 * numpy
 * h5py
 * PIL
-* Multicore-TSNE (https://github.com/DmitryUlyanov/Multicore-TSNE)
+* [Multicore-TSNE](https://github.com/DmitryUlyanov/Multicore-TSNE)
 
 ## Installation
+
+Download the VGG-16 weights: [vgg16_weights.h5](https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view?usp=sharing)
 
 ```sh
 $ git clone https://github.com/aDrz/movie-posters-convnet.git
@@ -30,7 +34,18 @@ $ git clone https://github.com/aDrz/movie-posters-convnet.git
 
 # Usage
 
-After cloning the repos, let's launch:
+After cloning you can just launch the bash script:
 ```sh
-$
+$ chmox +x run-posters-cnn.sh
+$ ./run-posters-cnn.sh
 ```
+
+Then grab a coffee...
+
+## Acknowledgments
+
+This project has been highly inspired by:
+
+* 
+* Inspiration
+* etc
