@@ -4,9 +4,19 @@
 Unsupervised clustering of movie posters with features extracted from Convolutional Neural Network. Visualization using d3js.
 
 This project is divided into 3 main scripts:
-* get-posters.py
+* get_posters.py
   * retrieve the posters from impawards.com.
   * create a thumbnail for each posters for the visualization.
+* get_features_from_cnn.py
+  * extract the last full-connected layer of size 4096 of VGG-16 [paper](https://arxiv.org/abs/1409.1556)
+* get_data_visu.py
+  * dimension reduction for data-visualization
+  * first PCA reduction then t-SNE to convert the 4096 dimensions features into a 2 dimensions features
+  * t-SNE: [paper](http://jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf)
+  * t-SNE: [tutorial on t-SNE](http://distill.pub/2016/misread-tsne/)
+
+To get parameters descriptions:
+* python get_XXX.py --help
 
 # Setup
 
@@ -40,7 +50,11 @@ $ git clone https://github.com/aDrz/movie-posters-convnet.git
 
 # Usage
 
-After cloning you can just launch the bash script:
+After cloning you can just launch the bash script that will:
+* download posters from 1920 to 2016
+* compute features
+* perform dimensional reduction on features of 3000 randomly choosen posters
+
 ```sh
 $ chmox +x run-posters-cnn.sh
 $ ./run-posters-cnn.sh
@@ -48,7 +62,10 @@ $ ./run-posters-cnn.sh
 
 Then grab a coffee...
 
+
+
 ## Results
+
 
 ## License
 
