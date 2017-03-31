@@ -124,3 +124,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * d3js plot: from [https://github.com/douglasbagnall/image-tsne](https://github.com/douglasbagnall/image-tsne)
+* [VGG-16 pre-trained model for Keras](https://gist.github.com/baraldilorenzo/07d7802847aaad0a35d3)
+* posters: [IMP Awards](http://impawards.com)
