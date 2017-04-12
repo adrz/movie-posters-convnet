@@ -9,8 +9,8 @@ import os
 import pickle
 import sys
 import argparse
-from subprocess import DEVNULL, STDOUT, check_call
-
+from subprocess import DEVNULL, STDOUT, check_call, call
+from multiprocessing import Pool
 
 # Create folders to receive posters and thumbnails
 def create_folder(folder):
@@ -40,8 +40,20 @@ def get_url_imgs(url_start, year):
     df['year'] = year
     df['url_imgs'] = url_start + str(year) + '/posters/' + \
                      df.html_link.str.replace('.html', '.jpg')
-
     return df
+
+
+def download_posters_multi(row):
+    img_file = row['url_imgs'].split('/')[-1]
+    folder = './posters/%d/' % row['year']
+    check_call(['wget', '-P', folder, row['url_imgs']],
+               stdout=DEVNULL, stderr=STDOUT)
+    local_image = folder + img_file
+    local_thumb = './thumbs/%d/%s'%(row['year'], img_file)
+    str_system = 'convert %s -resize 50x50! %s'%(local_image, local_thumb)
+    call(str_system, shell=True)
+    return (local_image, local_thumb)
+
 
 
 def download_posters(df, convert_location):
@@ -78,6 +90,9 @@ def main(argv):
     parser.add_argument('-o', '--output_file',
                         help="output pickle file used to locate posters file",
                         default='./cnn_posters.p')
+    parser.add_argument('-n', '--nproc',
+                        help="number of processus (default: 2)",type=int,
+                        default=2)
     parser.add_argument('-c', '--convert_location',
                         help="location of ImageMagick convert",
                         default='convert')
@@ -85,8 +100,8 @@ def main(argv):
 
     first_year = int(args.range.split('-')[0])
     last_year = int(args.range.split('-')[1])
-
     years = range(first_year, last_year+1)
+    nproc = args.nproc
 
     print('Creating folders for posters and thumbnails')
     folders_to_create = ['./posters/', './thumbs/']
@@ -100,8 +115,8 @@ def main(argv):
     df = pd.concat(df_list, ignore_index=True)
 
     print('Downloading posters')
-    df = download_posters(df, args.convert_location)
-    pickle.dump(df, open(args.output_file, 'wb'))
+    with Pool(nproc) as p:
+        data_download = p.map(download_posters_multi, df.to_dict(orient='records'))
 
     print('Scraping Finished')
 
