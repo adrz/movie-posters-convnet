@@ -118,7 +118,11 @@ def main(argv):
     with Pool(nproc) as p:
         data_download = p.map(download_posters_multi, df.to_dict(orient='records'))
 
+    df['local_image'] = list(map(lambda x: x[0], data_download))
+    df['local_thumb'] = list(map(lambda x: x[1], data_download))
     print('Scraping Finished')
+
+    pickle.dump(df, open(args.output_file,'wb'))
 
 
 if __name__ == "__main__":
