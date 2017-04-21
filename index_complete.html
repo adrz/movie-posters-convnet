@@ -1,30 +1,41 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
+    <title>ConvNet-Posters find similar movie posters</title>
+    <meta name="description" content="Find similar movie posters with the help of
+				      ConvNet" />
+    <meta name="keywords" content="ConvNet, DeepLearning, Movie-POsters, Posters, Movie
+				   Posters" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css" />
-    
     <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
     <link rel="stylesheet"
 	  href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" />
     <link rel="stylesheet"
 	  href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css" />
-    
-    <link rel="stylesheet" href="js/milligram.css" />
-    
-    <script src="js/plot3.js"></script>
 
+    <link rel="stylesheet" href="js/milligram.css" />
+    <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
+    <link rel="stylesheet" href="js/awesomplete.css" />
+    <script src="js/awesomplete.js" async></script>
   </head>
   <body>
 
     <div class="container">
-      <div class="row" style="margin-bottom: 2em">
-	<h1>Explore movie posters</h1>
+
+      <div class="row">
+	<h1>Select a movie</h1>
       </div>
-      <div class="column" id="tsne">
+      <div class="row">
+	<form class="clearfix">
+	  <input type="text" autocomplete="on" aria-autocomplete="list", value="",
+		 size="60%" />
+	  <input type="submit" />
+	  <input class="button button-clear" id="random" type="submit" value="random" />
+	</form>
       </div>
-      <div class="row" style="margin-top: 3em">
+
+      <div class="row">
 	<div class="column column">
 	  <div class="row">
 	    <h3>Poster:</h3>
@@ -111,46 +122,35 @@
 	  </div>
 	</div>
       </div>
-    <div class="row" style="margin-top: 6em">
-      <div class="column">
-	<h1>About</h1> ConvNet-Posters is a project that aims to use the power
-	of <a target="blank" href="http://cs231n.stanford.edu/">ConvNet</a> to cluster
-	similar movie posters.
-	<p>
 
-	</p>
-	<p>
-	  Scroll to zoom, and click on the thumbnails to select a poster. The 6th most
-	  ''similar'' movie posters will appear on the right side.
-	</p>
 
-	<p>
-	  
-	</p>
-	<p>
-	  For sake of readability (and computer safety), only 2000 posters were randomly
-	  selected and plotted. To explore all the ~38000 posters you need to use the
-	  search engine.
-	</p>
-      </div>
-      <div class="column">
-	<h1>Credit</h1>
-	<ul>
-	  <li>Posters are from: <a target="blank" href="http://www.impawards.com/">IMP Awards</a></li>
-	  <li>Pre-trained <a target="blank" href="https://arxiv.org/abs/1409.1556">VGG-19</a> weights for <a target="blank" href="https://github.com/fchollet/keras/tree/master/keras/applications">Keras</a></li>
-	</ul>
-<p>Designed by <a target="blank" href="http://github.com/aDrz">Adrien</a>
-	  (<a target="blank" href="https://github.com/aDrz/movie-posters-convnet">code source</a>). Licensed
-	  under the <a target="blank" href="https://mit-license.org/"
-		       title="MIT License">MIT License</a>.</p>
-	<p>
-	  If you want to know more about how it works 
+      <div class="row" style="margin-top: 3em">
+	<div class="column">
+	  <h1>About</h1> ConvNet-Posters is a project that aims to use the power
+	  of <a target="blank" href="http://cs231n.stanford.edu/">ConvNet</a> to cluster
+	  similar movie posters.
+	  <p>
+	    The higher the indicated score are, the more the ConvNet consider the two movie
+	    posters similar.
 	  </p>
+	  <p>Designed by <a target="blank" href="http://github.com/aDrz">Adrien</a>
+	    (<a target="blank" href="https://github.com/aDrz/movie-posters-convnet">code source</a>). Licensed
+	    under the <a target="blank" href="https://mit-license.org/"
+			 title="MIT License">MIT License</a>.</p>
+
+	</div>
+	<div class="column">
+	  <h1>Credit</h1>
+	  <ul>
+	    <li>Posters are from: <a target="blank" href="http://www.impawards.com/">IMP Awards</a></li>
+	    <li>Pre-trained <a target="blank" href="https://arxiv.org/abs/1409.1556">VGG-19</a> weights for <a target="blank" href="https://github.com/fchollet/keras/tree/master/keras/applications">Keras</a></li>
+	  </ul>
+	  
+	</div>
       </div>
+
     </div>
-    
-</div>
 
-
-</body>
+  </body>
+  <script type="text/javascript" src="js/dataplot.js"></script>
 </html>
