@@ -42,7 +42,7 @@ def get_url_imgs(url_start, year):
                      df.html_link.str.replace('.html', '.jpg')
     return df
 
-
+# Download poster with multiproc way quicker
 def download_posters_multi(row):
     img_file = row['url_imgs'].split('/')[-1]
     folder = './posters/%d/' % row['year']
@@ -55,7 +55,7 @@ def download_posters_multi(row):
     return (local_image, local_thumb)
 
 
-
+# Slow/Unefficient but it has done his job in the past
 def download_posters(df, convert_location):
     local_image = []
     local_thumb = []
