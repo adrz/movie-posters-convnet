@@ -1,45 +1,49 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# from cnnkeras import *
 
-from cnnkeras import *
 import pandas as pd
 import sys
 import os
 import pickle
 import argparse
 
-# Variable specific to vgg-16
+from vgg16 import VGG16
+from resnet50 import ResNet50
+from vgg19 import VGG19
+
+from keras.preprocessing import image
+from imagenet_utils import preprocess_input
+
+import numpy as np
+from functools import reduce
+from operator import mul
+from scipy.sparse import csr_matrix
+
+# Variable specific to vgg-16/vgg-19
 img_width = 224
 img_height = 224
 
 
-def setup_vgg_cnn(vgg_path):
-    # Variable specific to vgg16
-    # load model
-    model = VGG_16()
-    load_weights(model, vgg_path)
-
-    # compile
-    sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(optimizer=sgd, loss='categorical_crossentropy')
-    return model
-
-
-def get_features_cnn(model, df):
+# Feature extractor
+def get_features(model, df):
     features = []
     n_images = len(df)
-    for index, row in df.iterrows():
+    img_paths = list(df.local_image)
+    for idx, img_path in enumerate(img_paths):
         print('getting features for %s %d/%d' %
-              (row.local_image, index+1, n_images))
-        try:
-            image = get_image(row.local_image, img_width, img_height)
-            features.append(model.predict(image)[0])
-        except:
-            features.append([])
-
-    df['features'] = features
-    return df
+              (img_path, idx+1, n_images))
+        # Resize image to be 224x224
+        img = image.load_img(img_path, target_size=(224, 224))
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        x = preprocess_input(x)
+        y = model.predict(x)
+        # Vectorize the 7x7x512 tensor
+        y = y.reshape(reduce(mul, y.shape, 1))
+        features.append(y)
+    return features
 
 
 def main(argv):
@@ -50,15 +54,13 @@ def main(argv):
     parser.add_argument('-o', '--output_file',
                         help="output pickle file used with features",
                         default='./cnn_posters_features.p')
-    parser.add_argument('-v', '--vgg_file',
-                        help="VGG weights (https://goo.gl/ZKLhgj)",
-                        default='./vgg16_weights.h5')
     args = parser.parse_args()
 
     df = pickle.load(open(args.input_file, 'rb'))
 
-    model_ = setup_vgg_cnn(args.vgg_file)
-    df = get_features_cnn(model_, df)
+    # Load VGG19, guys you better have a GPU...
+    model_ = VGG16(weights='imagenet', include_top=False)
+    df['features'] = get_features_cnn(model_, df)
 
     pickle.dump(df, open(args.output_file, 'wb'))
 
