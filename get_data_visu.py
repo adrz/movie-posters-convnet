@@ -167,7 +167,7 @@ def main(argv):
                         default='./datasets/x.json')
     parser.add_argument('-n', '--pca_components',
                         help="number of PCA components for data reduction",
-                        type=int, default=500)
+                        type=int, default=200)
     parser.add_argument('-p', '--perplexity',
                         help="perplexity for t-SNE",
                         type=int, default=30)
