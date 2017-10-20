@@ -128,7 +128,7 @@ def get_closest_features(df, pca_components):
 
     
 def process_features_tsne(df, n_samples=2000, perplexity=40, n_jobs=2, output_file, tsne_alg='sklearn'):
-    df_json = df.sample(n_samples))
+    df_json = df.sample(n_samples)
 
     # n_components fixed to 200
     pca = PCA(n_components=200, whiten=True)
@@ -167,7 +167,7 @@ def main(argv):
                         default='./datasets/x.json')
     parser.add_argument('-n', '--pca_components',
                         help="number of PCA components for data reduction",
-                        type=int, default=500)
+                        type=int, default=200)
     parser.add_argument('-p', '--perplexity',
                         help="perplexity for t-SNE",
                         type=int, default=30)
