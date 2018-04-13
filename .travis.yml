@@ -12,3 +12,5 @@ install:
 # command to run tests
 script:
   - python -m pytest --cov src/ tests/ # pytest # or py.test for Python versions 3.5 and below
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
