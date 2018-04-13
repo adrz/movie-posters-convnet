@@ -23,7 +23,7 @@ def get_yearly_url_imgs(year):
     url = '{}{}/std.html'.format(URL_IMPAWARDS,
                                  year)
     r = request.urlopen(url).read()
-    soup = BeautifulSoup(r, 'html5lib')
+    soup = BeautifulSoup(r, 'lxml')
 
     # Find all trs
     trs = soup.find_all('tr')
