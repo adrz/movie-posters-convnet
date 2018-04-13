@@ -1,3 +1,5 @@
+[![Build
+Status](https://travis-ci.org/adrz/movie-posters-convnet.svg?branch=master)](https://travis-ci.org/adrz/movie-posters-convnet)
 
 # Overview
 
