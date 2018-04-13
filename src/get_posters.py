@@ -1,128 +1,112 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
+import os
+import sys
 from bs4 import BeautifulSoup
 from urllib import request
-import pandas as pd
-import os
-import pickle
-import sys
 import argparse
 from subprocess import DEVNULL, STDOUT, check_call, call
 from multiprocessing import Pool
-
-# Create folders to receive posters and thumbnails
-def create_folder(folder):
-    print(folder)
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+import itertools
+from functools import partial
+from . import utils
+from . import db_manager
 
 
-# Scrap the url of posters from 'impawards.com/'
-def get_url_imgs(url_start, year):
+URL_IMPAWARDS = 'http://www.impawards.com/'
 
-    url = url_start+str(year)+'/std.html'
+
+def get_yearly_url_imgs(year):
+    """ Retrieve all the posters' urls along with the title
+    from impawards for specific year
+    """
+    url = '{}{}/std.html'.format(URL_IMPAWARDS,
+                                 year)
     r = request.urlopen(url).read()
-    soup = BeautifulSoup(r)
+    soup = BeautifulSoup(r, 'html5lib')
 
-    # Find all ahrefs
-    links = soup.find_all('a')
+    # Find all trs
+    trs = soup.find_all('tr')
 
-    # Filter first useless links
-    links_filter = [links[i] for i in range(53, len(links)-1)]
-    links_filter = list(map(lambda x: x.get('href'), links_filter))
+    dict_imgs = []
+    format_url = '{base}{year}/posters/{link}'
+    for tr in trs[::2]:
+        tds = tr.find_all('td')
+        title = tds[0].text
+        html_links = [x.get('href') for x in tds[1].find_all('a')]
+        url_imgs = [format_url.format(base=URL_IMPAWARDS,
+                                      year=year,
+                                      link=x)
+                    for x in html_links]
+        dict_tmp = [{'title': title,
+                     'year': year,
+                     'url_img': x.replace('html', 'jpg')}
+                    for x in url_imgs]
+        dict_imgs += dict_tmp
 
-    # Pandas easier for text-processing
-    df = pd.DataFrame({'html_link': links_filter})
-    # df['html_link'] = df['html_link'].str.replace('_ver[0-9]+','')
-    df.drop_duplicates(inplace=True)
-    df['year'] = year
-    df['url_imgs'] = url_start + str(year) + '/posters/' + \
-                     df.html_link.str.replace('.html', '.jpg')
-    return df
+    return dict_imgs
 
-# Download poster with multiproc way quicker
-def download_posters_multi(row):
-    img_file = row['url_imgs'].split('/')[-1]
-    folder = './posters/%d/' % row['year']
-    check_call(['wget', '-P', folder, row['url_imgs']],
+
+def download_poster(link, config):
+    poster_folder = config['scraping']['folder_images']
+    thumb_folder = config['scraping']['folder_thumbnails']
+    img_file = link['url_img'].split('/')[-1]
+    folder = '{}/{}/'.format(poster_folder, link['year'])
+    check_call(['wget', '-P', folder, link['url_img']],
                stdout=DEVNULL, stderr=STDOUT)
-    local_image = folder + img_file
-    local_thumb = './thumbs/%d/%s'%(row['year'], img_file)
-    str_system = 'convert %s -resize 50x50! %s'%(local_image, local_thumb)
+
+    path_img = '{}{}'.format(folder, img_file)
+    path_thumb = '{}/{}/{}'.format(thumb_folder,
+                                   link['year'],
+                                   img_file)
+    str_system = 'convert {} -resize 50x50! {}'.format(
+        path_img, path_thumb)
     call(str_system, shell=True)
-    return (local_image, local_thumb)
-
-
-# Slow/Unefficient but it has done his job in the past
-def download_posters(df, convert_location):
-    local_image = []
-    local_thumb = []
-
-    for index, row in df.iterrows():
-        folder = './posters/'+str(row['year']) + '/'
-
-        # Download poster with wget
-        check_call(['wget', '-P', folder, row['url_imgs']],
-                   stdout=DEVNULL, stderr=STDOUT)
-        file_str = folder + row['url_imgs'].split('/')[-1]
-        local_image.append(file_str)
-        thumbnail_file = './thumbs/' + str(row['year']) + '/' + \
-                         row['url_imgs'].split('/')[-1]
-
-        # Downsample posters to a 50x50 pixels (for datavisualization purpose)
-        str_system = convert_location + ' ' + file_str + \
-                     ' -resize 50x50! ' + thumbnail_file
-        os.system(str_system)
-        local_thumb.append(thumbnail_file)
-
-    df['local_image'] = local_image
-    df['local_thumb'] = local_thumb
-    return df
+    link['path_img'] = path_img
+    link['path_thumb'] = path_thumb
+    return link
 
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-r', '--range',
-                        help="range of years to scrap (ex: 1920-2017)",
-                        default="1990-2017")
-    parser.add_argument('-o', '--output_file',
-                        help="output pickle file used to locate posters file",
-                        default='./cnn_posters.p')
-    parser.add_argument('-n', '--nproc',
-                        help="number of processus (default: 2)",type=int,
-                        default=2)
-    parser.add_argument('-c', '--convert_location',
-                        help="location of ImageMagick convert",
-                        default='convert')
+    parser.add_argument('-c', '--config',
+                        help="config file (default: config/development.conf",
+                        default="./config/development.conf")
     args = parser.parse_args()
+    config = utils.read_config(args['config'])
 
-    first_year = int(args.range.split('-')[0])
-    last_year = int(args.range.split('-')[1])
-    years = range(first_year, last_year+1)
-    nproc = args.nproc
+    years = range(config['scraping']['years_range'][0],
+                  config['scraping']['years_range'][1]+1)
+    n_proc = config['scraping']['n_proc']
 
     print('Creating folders for posters and thumbnails')
-    folders_to_create = ['./posters/', './thumbs/']
-    folders_to_create += map(lambda x: './posters/'+str(x), years)
-    folders_to_create += map(lambda x: './thumbs/'+str(x), years)
-    [create_folder(folder) for folder in folders_to_create]
+
+    folder_posters = config['scraping']['folder_images']
+    folder_thumbs = config['scraping']['folder_thumbnails']
+    folders_to_create = [folder_posters, folder_thumbs]
+    folders_to_create += [os.path.join(folder_posters, str(x))
+                          for x in years]
+    folders_to_create += [os.path.join(folder_thumbs, str(x))
+                          for x in years]
+
+    [utils.create_folder(folder) for folder in folders_to_create]
 
     print('Retrieve url of posters')
-    url_start = 'http://www.impawards.com/'
-    df_list = list(map(lambda x: get_url_imgs(url_start, x), years))
-    df = pd.concat(df_list, ignore_index=True)
+    yearly_urls = [get_yearly_url_imgs(x)
+                   for x in years]
+    yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
 
     print('Downloading posters')
-    with Pool(nproc) as p:
-        data_download = p.map(download_posters_multi, df.to_dict(orient='records'))
+    with Pool(n_proc) as p:
+        data_download = p.map(partial(download_poster, config=config),
+                              yearly_urls)
 
-    df['local_image'] = list(map(lambda x: x[0], data_download))
-    df['local_thumb'] = list(map(lambda x: x[1], data_download))
-    print('Scraping Finished')
+    # push to db
+    session = db_manager.get_db(config['general']['db_uri'])
+    objects = [db_manager.Poster(x) for x in data_download]
 
-    pickle.dump(df, open(args.output_file,'wb'))
+    session.bulk_save_objects(objects)
+    session.commit()
 
 
 if __name__ == "__main__":
