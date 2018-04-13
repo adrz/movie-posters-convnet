@@ -1,5 +1,7 @@
 import unittest
 import os
+import sys
+sys.path.append('src')
 from src.get_posters import (get_yearly_url_imgs,
                              download_poster)
 from src.utils import create_folder

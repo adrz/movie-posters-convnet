@@ -9,8 +9,8 @@ from subprocess import DEVNULL, STDOUT, check_call, call
 from multiprocessing import Pool
 import itertools
 from functools import partial
-from . import utils
-from . import db_manager
+import utils
+import db_manager
 
 
 URL_IMPAWARDS = 'http://www.impawards.com/'
