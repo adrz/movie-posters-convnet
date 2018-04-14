@@ -21,7 +21,7 @@ img_height = 224
 
 
 # Feature extractor
-def get_features(model, data):
+def get_features(model, data, db):
     n_posters = len(data)
     for i, poster in enumerate(data):
         print('getting features for {} {}/{}'.format(
@@ -35,6 +35,7 @@ def get_features(model, data):
         y = model.predict(x)
         # Vectorize the 7x7x512 tensor
         poster.features = y.reshape(reduce(mul, y.shape, 1))
+        db.commit()
     return data
 
 
@@ -56,7 +57,7 @@ def main(argv):
     db = db_manager.get_db(config['general']['db_uri'])
     data = db_manager.get_all_data(config['general']['db_uri'])
 
-    data_features = get_features(model, data)
+    data_features = get_features(model, data, db)
     db.commit()
     return data_features
 

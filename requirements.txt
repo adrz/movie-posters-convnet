@@ -6,3 +6,5 @@ sqlalchemy==1.2.6
 lxml==4.2.1
 tensorflow-gpu==1.7.0
 keras==2.1.5
+h5py==2.7.1
+pillow==5.1.0
