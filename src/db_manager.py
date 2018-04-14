@@ -57,6 +57,7 @@ def get_db(uri):
     session = Session()
     return session
 
+
 def get_all_data(uri):
     db = get_db(uri)
-    return db.query(Poster).all()
+    return db.query(Poster).all(), db
