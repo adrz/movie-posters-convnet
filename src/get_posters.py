@@ -73,7 +73,7 @@ def main(argv):
                         help="config file (default: config/development.conf",
                         default="./config/development.conf")
     args = parser.parse_args()
-    config = utils.read_config(args['config'])
+    config = utils.read_config(args.config)
 
     years = range(config['scraping']['years_range'][0],
                   config['scraping']['years_range'][1]+1)
