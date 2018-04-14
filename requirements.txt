@@ -4,3 +4,5 @@ configparser==3.5.0
 pytest-cov==2.5.1
 sqlalchemy==1.2.6
 lxml==4.2.1
+tensorflow-gpu==1.7.0
+keras==2.1.5
