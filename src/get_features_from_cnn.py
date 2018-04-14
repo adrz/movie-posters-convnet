@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# from cnnkeras import *
-
 import sys
 import argparse
 import numpy as np
@@ -23,23 +21,21 @@ img_height = 224
 
 
 # Feature extractor
-def get_features(model, df):
-    features = []
-    n_images = len(df)
-    img_paths = list(df.local_image)
-    for idx, img_path in enumerate(img_paths):
-        print('getting features for %s %d/%d' %
-              (img_path, idx+1, n_images))
+def get_features(model, data):
+    n_posters = len(data)
+    for i, poster in enumerate(data):
+        print('getting features for {} {}/{}'.format(
+            poster.path_img, i+1, n_posters))
         # Resize image to be 224x224
-        img = image.load_img(img_path, target_size=(224, 224))
+        img = image.load_img(poster.path_img,
+                             target_size=(224, 224))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
         y = model.predict(x)
         # Vectorize the 7x7x512 tensor
-        y = y.reshape(reduce(mul, y.shape, 1))
-        features.append(y)
-    return features
+        poster.features = y.reshape(reduce(mul, y.shape, 1))
+    return data
 
 
 def load_model(config):
@@ -53,14 +49,17 @@ def main(argv):
                         help="config file (default: config/development.conf",
                         default="./config/development.conf")
     args = parser.parse_args()
-    config = utils.read_config(args['config'])
-
+    config = utils.read_config(args.config)
+    config = utils.read_config('./config/development.conf')
     # Load VGG16, guys you better have a GPU...
     model = load_model(config)
-    db = db_manager.get_db(config['general']['db_uri']
-    df['features'] = get_features_cnn(model, df)
+    db = db_manager.get_db(config['general']['db_uri'])
+    data = db_manager.get_all_data(config['general']['db_uri'])
 
-    pickle.dump(df, open(args.output_file, 'wb'))
+    data_features = get_features(model, data)
+    db.commit()
+    return data_features
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])

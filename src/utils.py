@@ -2,7 +2,7 @@ import configparser
 import os
 
 
-def read_config(config_path):
+def read_config(config_path='./config/development.conf'):
     config = configparser.ConfigParser(allow_no_value=True)
     config.read(config_path)
 
