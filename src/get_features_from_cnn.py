@@ -36,7 +36,6 @@ def get_features(model, data, db):
         y = model.predict(x)
         # Vectorize the 7x7x512 tensor
         poster.features = y.reshape(reduce(mul, y.shape, 1))
-        # features.append(np.array([1, 5, 7]))
         db.commit()
     return data
 
