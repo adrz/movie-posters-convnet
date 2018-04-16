@@ -23,7 +23,6 @@ img_height = 224
 # Feature extractor
 def get_features(model, data, db):
     n_posters = len(data)
-    features = []
     for i, poster in enumerate(data):
         print('getting features for {} {}/{}'.format(
             poster.path_img, i+1, n_posters))
@@ -36,7 +35,7 @@ def get_features(model, data, db):
         y = model.predict(x)
         # Vectorize the 7x7x512 tensor
         poster.features = y.reshape(reduce(mul, y.shape, 1))
-        db.commit()
+    db.commit()
     return data
 
 
@@ -52,7 +51,7 @@ def main(argv):
                         default="./config/development.conf")
     args = parser.parse_args()
     config = utils.read_config(args.config)
-    config = utils.read_config('./config/development.conf')
+    # config = utils.read_config('./config/development.conf')
     # Load VGG16, guys you better have a GPU...
     model = load_model(config)
     data, db = db_manager.get_all_data(config['general']['db_uri'])

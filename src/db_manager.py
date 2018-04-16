@@ -37,6 +37,9 @@ class Poster(Base):
     path_img = Column(String, nullable=True)
     path_thumb = Column(String, nullable=True)
     features = Column(ARRAY, nullable=True)
+    features_pca = Column(ARRAY, nullable=True)
+    closest_posters = Column(String, nullable=True)
+    title_display = Column(String, nullable=True)
 
     def __init__(self, dict_poster=None):
         if dict_poster is None:
@@ -47,6 +50,9 @@ class Poster(Base):
             self.path_img = dict_poster.get('path_img', '')
             self.path_thumb = dict_poster.get('path_thumb', '')
             self.features = dict_poster.get('features', np.array(None))
+            self.features_pca = dict_poster.get('features_pca', np.array(None))
+            self.closest_posters = dict_poster.get('closest_posters', '')
+            self.title_display = dict_poster.get('title_display', '')
 
 
 def get_db(uri):

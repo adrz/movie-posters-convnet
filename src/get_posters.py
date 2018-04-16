@@ -11,9 +11,22 @@ import itertools
 from functools import partial
 import utils
 import db_manager
+import re
 
 
 URL_IMPAWARDS = 'http://www.impawards.com/'
+
+
+def get_title_display(title, year, url):
+    version = re.search('_ver([0-9]{2,3}|[2-9])', url)
+    if version:
+        title_display = '{}, {}, v{}'.format(
+            title, year, version.group(1))
+    else:
+        title_display = '{}, {}'.format(
+            title, year)
+
+    return title_display
 
 
 def get_yearly_url_imgs(year):
@@ -40,6 +53,9 @@ def get_yearly_url_imgs(year):
                     for x in html_links]
         dict_tmp = [{'title': title,
                      'year': year,
+                     'title_display': get_title_display(title,
+                                                        year,
+                                                        x),
                      'url_img': x.replace('html', 'jpg')}
                     for x in url_imgs]
         dict_imgs += dict_tmp
