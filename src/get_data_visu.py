@@ -66,36 +66,36 @@ def get_closest_features(data, db, config):
     db.commit()
 
 
-def process_features_tsne(df, n_samples=2000,
-                          perplexity=40, n_jobs=2,
-                          output_file, tsne_alg='sklearn'):
-    df_json = df.sample(n_samples)
+# def process_features_tsne(df, n_samples=2000,
+#                           perplexity=40, n_jobs=2,
+#                           output_file, tsne_alg='sklearn'):
+#     df_json = df.sample(n_samples)
 
-    # n_components fixed to 200
-    pca = PCA(n_components=200, whiten=True)
+#     # n_components fixed to 200
+#     pca = PCA(n_components=200, whiten=True)
 
-    if tsne_alg == 'sklearn':
-        tsne = TSNE(n_components=2, perplexity=perplexity)
-    else:
-        tsne = TSNE_multi(n_components=2, perplexity=perplexity, n_jobs=n_jobs)
+#     if tsne_alg == 'sklearn':
+#         tsne = TSNE(n_components=2, perplexity=perplexity)
+#     else:
+#         tsne = TSNE_multi(n_components=2, perplexity=perplexity, n_jobs=n_jobs)
 
-    data = np.array(list(df_json['features']))
+#     data = np.array(list(df_json['features']))
 
-    data = pca.fit_transform(data)
-    data_tsne = tsne.fit_transform(data)
+#     data = pca.fit_transform(data)
+#     data_tsne = tsne.fit_transform(data)
 
-    scaled_data = scale_coords(data_tsne, width=1000, height=1000)
-    scaled_data_array = np.array(scaled_data)
-    df_json['features_visu_x'] = scaled_data_array[:,0]
-    df_json['features_visu_y'] = scaled_data_array[:,1]
+#     scaled_data = scale_coords(data_tsne, width=1000, height=1000)
+#     scaled_data_array = np.array(scaled_data)
+#     df_json['features_visu_x'] = scaled_data_array[:,0]
+#     df_json['features_visu_y'] = scaled_data_array[:,1]
 
-    df_json = df_json[['features_visu_x', 'features_visu_y',
-                       'local_thumb', 'url_imgs',
-                       'closest_1', 'closest_2', 'closest_3',
-                       'closest_4', 'closest_5', 'closest_6',
-                       'score_1', 'score_2', 'score_3']]
-    json.dump(df_json.values.tolist(),
-              open(output_file, 'w'))
+#     df_json = df_json[['features_visu_x', 'features_visu_y',
+#                        'local_thumb', 'url_imgs',
+#                        'closest_1', 'closest_2', 'closest_3',
+#                        'closest_4', 'closest_5', 'closest_6',
+#                        'score_1', 'score_2', 'score_3']]
+#     json.dump(df_json.values.tolist(),
+#               open(output_file, 'w'))
 
 
 def main(argv):
