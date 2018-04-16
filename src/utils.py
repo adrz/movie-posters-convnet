@@ -14,6 +14,8 @@ def read_config(config_path='./config/development.conf'):
         [int(x) for x in config['scraping']['years_range'].split('-')])
     config['scraping']['n_proc'] = int(config['scraping']['n_proc'])
 
+    config['features']['pca_n_components'] = int(config['features']
+                                                 ['pca_n_components'])
     return config
 
 

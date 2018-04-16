@@ -15,6 +15,9 @@ import os
 import pickle
 import argparse
 
+import utils
+import db_manager
+
 
 def scale_coords(coords, width=800, height=800):
     """ Scale the coordinate to fit within a specific range
@@ -35,15 +38,15 @@ def scale_coords(coords, width=800, height=800):
 
 def get_PCA_features(data, n_components):
     features = np.array([x.features for x in data])
-    pca = PCA(n_components=50, whiten=True)
+    pca = PCA(n_components=n_components, whiten=True)
     X = pca.fit_transform(features)
     return X
 
 
 # Function getting the closest 6 movie posters for all the movie posters
 # Far from being a beautiful code...
-def get_closest_features(data, db, pca_components):
-    X = get_PCA_features(data, pca_components)
+def get_closest_features(data, db, config):
+    X = get_PCA_features(data, config['features']['pca_n_components'])
 
     # Could become HUGE !
     X_cosine = cosine_similarity(X)
@@ -57,7 +60,8 @@ def get_closest_features(data, db, pca_components):
 
     closest_urls = []
     for d, idxs in zip(data, idx_keep):
-        d.closest_posters = ';'.join([data[x].url_img for x in idxs])
+        # d.closest_posters = ';'.join([data[x].url_img for x in idxs])
+        d.closest_posters = ','.join(idxs+1)
 
     db.commit()
 
@@ -96,48 +100,15 @@ def process_features_tsne(df, n_samples=2000,
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input_file',
-                        help="input file (output of get_features_from_cnn.py)",
-                        default="./cnn_posters_features.p")
-    parser.add_argument('-o', '--output_file',
-                        help="output json file used by d3js",
-                        default='./datasets/x.json')
-    parser.add_argument('-n', '--pca_components',
-                        help="number of PCA components for data reduction",
-                        type=int, default=200)
-    parser.add_argument('-p', '--perplexity',
-                        help="perplexity for t-SNE",
-                        type=int, default=30)
-    parser.add_argument('-j', '--n_jobs',
-                        help="number of cores to use for the tsne",
-                        type=int, default=4)
-    parser.add_argument('-t', '--tsne',
-                        help='implementation tsne (multicore/sklearn)',
-                        default='sklearn')
-    parser.add_argument('-s', '--n_sample',
-                        help='number of sample selected for visualization',
-                        type=int, default=2000)
+    parser.add_argument('-c', '--config',
+                        help="config file (default: config/development.conf",
+                        default="./config/development.conf")
     args = parser.parse_args()
+    config = utils.read_config(args.config)
+    data, db = db_manager.get_all_data(config['general']['db_uri'])
 
-    df = pickle.load(open(args.input_file, 'rb'))
-
-    # Get the version of the posters and update title accordingly
-    df['ver'] = df.html_link.str.extract('_ver([0-9]{2,3}|[2-9])').fillna('1')
-    newtitle = (df.title.str.replace('(', ', ')
-                .str.replace(')', ''))
-    newtitle = newtitle + ' , ' + 'ver ' + df['ver']
-    df['title'] = newtitle
-
-    # Search Engine
-    df = get_closest_features(df, args.pca_components)
-    output = 'datasets/data_autocomplete_all.json'
-    get_json_search_engine(df, output)
-    # t-SNE 2D features
-    process_features_tsne(df, args.pca_components,
-                     args.perplexity,
-                          args.n_jobs, args.output_file, args.tsne)
-
-    write_output_json(df, output_file)
+    data_features = get_features(data, db, config)
+    db.commit()
 
 
 if __name__ == "__main__":
