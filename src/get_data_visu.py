@@ -107,7 +107,7 @@ def main(argv):
     config = utils.read_config(args.config)
     data, db = db_manager.get_all_data(config['general']['db_uri'])
 
-    data_features = get_features(data, db, config)
+    data_features = get_closest_features(data, db, config)
     db.commit()
 
 
