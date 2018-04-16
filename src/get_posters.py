@@ -68,8 +68,13 @@ def download_poster(link, config):
     thumb_folder = config['scraping']['folder_thumbnails']
     img_file = link['url_img'].split('/')[-1]
     folder = '{}/{}/'.format(poster_folder, link['year'])
-    check_call(['wget', '-P', folder, link['url_img']],
-               stdout=DEVNULL, stderr=STDOUT)
+    while True:
+        try:
+            check_call(['wget', '-P', folder, link['url_img']],
+                       stdout=DEVNULL, stderr=STDOUT)
+            break
+        except:
+            print('Error wget')
 
     path_img = '{}{}'.format(folder, img_file)
     path_thumb = '{}/{}/{}'.format(thumb_folder,
@@ -108,8 +113,10 @@ def main(argv):
     [utils.create_folder(folder) for folder in folders_to_create]
 
     print('Retrieve url of posters')
-    yearly_urls = [get_yearly_url_imgs(x)
-                   for x in years]
+    # yearly_urls = [get_yearly_url_imgs(x)
+    #                for x in years]
+    with Pool(n_proc) as p:
+        yearly_urls = p.map(get_yearly_url_imgs, years)
     yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
 
     print('Downloading posters')
