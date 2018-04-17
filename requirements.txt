@@ -12,3 +12,4 @@ Flask_RESTful==0.3.6
 scikit_learn==0.19.1
 flask_cors==3.0.3
 Flask==0.12.2
+requests==2.18.4
