@@ -75,11 +75,11 @@ def get_yearly_url_imgs(year):
 def download_poster(link, size_thumb=(50, 50)):
     img_bytes = SESSION.get(link, stream=True, verify=False).content
     img_poster = Image.open(io.BytesIO(img_bytes))
-    base64_poster = base64.b64encode(img_bytes)
+    base64_poster = base64.b64encode(img_bytes.decode('utf-8'))
     img_poster.thumbnail(size_thumb, Image.ANTIALIAS)
     img_thumb_bytes = io.BytesIO()
     img_poster.save(img_thumb_bytes, format='JPEG')
-    base64_thumb = base64.b64encode(img_thumb_bytes.getvalue())
+    base64_thumb = base64.b64encode(img_thumb_bytes.getvalue().decode('utf-8'))
     return base64_poster, base64_thumb
 
 
