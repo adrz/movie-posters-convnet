@@ -16,19 +16,19 @@ import utils
 import db_manager
 
 
-# Variable specific to vgg-16/vgg-19
 img_width = 224
 img_height = 224
 
 
 # Feature extractor
-def get_features(model, data, db):
-    n_posters = len(data)
+def get_features(model, db):
+    data = db.query(db_manager.Poster)
+    n_posters = data.count()
     for i, poster in enumerate(data):
         print('getting features for {} {}/{}'.format(
             poster.path_img, i+1, n_posters))
         # Resize image to be 224x224
-        img = image.load_img(poster.path_img,
+        img = utils.load_img(poster.base64_img,
                              target_size=(img_width, img_height))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
@@ -58,9 +58,9 @@ def main(argv):
     # config = utils.read_config('./config/development.conf')
     # Load VGG16, guys you better have a GPU...
     model = load_model(config)
-    data, db = db_manager.get_all_data(config['general']['db_uri'])
+    db = db_manager.get_db(config['general']['db_uri'])
 
-    data_features = get_features(model, data, db)
+    data_features = get_features(model, db)
     db.commit()
     return data_features
 

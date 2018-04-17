@@ -16,7 +16,7 @@ def scale_coords(coords, width=800, height=800):
     """ Scale the coordinate to fit within a specific range
     """
     minx, miny = min(coords[:, 0]), min(coords[:, 1])
-    maxx, maxx = max(coords[:, 0]), max(coords[:, 1])
+    maxx, maxy = max(coords[:, 0]), max(coords[:, 1])
 
     scale_x = width / (maxx - minx)
     scale_y = height / (maxy - miny)

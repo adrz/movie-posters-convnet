@@ -23,8 +23,8 @@ class ApiPosters(Resource):
         """
 
         if id == 'idmovies':
-            data = [x._asdict() for
-                    x in self.db.query(Poster.id, Poster.title_display).all()]
+            data = {x[1]: x[0] for
+                    x in self.db.query(Poster.id, Poster.title_display).all()}
         else:
             id = int(id)
             print('movie id: {}'.format(id))
@@ -35,7 +35,9 @@ class ApiPosters(Resource):
             ids += [int(x) for x in ids_closest['closest_posters'].split(',')]
             fields = (Poster.id,
                       Poster.title_display,
-                      Poster.url_img)
+                      Poster.base64_img)
 
             data = [self.get_movie_by_id(x, fields) for x in ids]
+            for d in data:
+                d['base64_img'] = d['base64_img'].decode("utf-8")
         return data
