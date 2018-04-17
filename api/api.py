@@ -1,6 +1,7 @@
 from src.db_manager import (get_db, Poster)
 from src.utils import read_config
 from flask_restful import Resource
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 
 class ApiPosters(Resource):
@@ -9,8 +10,10 @@ class ApiPosters(Resource):
         self.db = get_db(self.config['general']['db_uri'])
 
     def get_movie_by_id(self, id, fields):
-        print('entering get_movie_by_id')
-        result = self.db.query(fields).filter_by(id=id).first()._asdict()
+        if isinstance(fields, InstrumentedAttribute):
+            result = self.db.query(fields).filter_by(id=id).first()._asdict()
+        else:
+            result = self.db.query(*fields).filter_by(id=id).first()._asdict()
         print('result: {}'.format(result))
         return result
 
@@ -29,5 +32,5 @@ class ApiPosters(Resource):
                   Poster.url_img,
                   Poster.closest_posters)
 
-        data = [self.get_movie_by_id(x, *fields) for x in ids]
+        data = [self.get_movie_by_id(x, fields) for x in ids]
         return data
