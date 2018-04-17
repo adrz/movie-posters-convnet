@@ -8,3 +8,7 @@ tensorflow-gpu==1.7.0
 keras==2.1.5
 h5py==2.7.1
 pillow==5.1.0
+Flask_RESTful==0.3.6
+scikit_learn==0.19.1
+flask_cors==3.0.3
+Flask==0.12.2
