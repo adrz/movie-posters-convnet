@@ -60,6 +60,7 @@ def get_closest_features(data, db, config):
 
     db.commit()
 
+    return True
 
 # def process_features_tsne(df, n_samples=2000,
 #                           perplexity=40, n_jobs=2,
@@ -103,7 +104,7 @@ def main(argv):
     data, db = db_manager.get_all_data(config['general']['db_uri'])
 
     data_features = get_closest_features(data, db, config)
-    db.commit()
+    print(data_features)
 
 
 if __name__ == "__main__":
