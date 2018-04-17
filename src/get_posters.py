@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import io
 from bs4 import BeautifulSoup
 from urllib import request
+import requests
 import argparse
 from subprocess import DEVNULL, STDOUT, check_call, call
 from multiprocessing import Pool
@@ -12,9 +14,12 @@ from functools import partial
 import utils
 import db_manager
 import re
+from PIL import Image
+import base64
 
 
 URL_IMPAWARDS = 'http://www.impawards.com/'
+SESSION = requests.Session()
 
 
 def get_title_display(title, year, url):
@@ -43,7 +48,9 @@ def get_yearly_url_imgs(year):
 
     dict_imgs = []
     format_url = '{base}{year}/posters/{link}'
-    for tr in trs[::2]:
+    for itr, tr in enumerate(trs[::2]):
+        print('download: {}/{}'.format(itr,
+                                       len(trs)))
         tds = tr.find_all('td')
         title = tds[0].text
         html_links = [x.get('href') for x in tds[1].find_all('a')]
@@ -51,41 +58,56 @@ def get_yearly_url_imgs(year):
                                       year=year,
                                       link=x)
                     for x in html_links]
+        url_imgs = [x.replace('html', 'jpg') for x in url_imgs]
+        base64_imgs = [download_poster(x) for x in url_imgs]
         dict_tmp = [{'title': title,
                      'year': year,
+                     'base64_img': y[0],
+                     'base64_thumb': y[1],
                      'title_display': get_title_display(title,
                                                         year,
                                                         x),
-                     'url_img': x.replace('html', 'jpg')}
-                    for x in url_imgs]
+                     'url_img': x}
+                    for x, y in zip(url_imgs, base64_imgs)]
         dict_imgs += dict_tmp
 
     return dict_imgs
 
 
-def download_poster(link, config):
-    poster_folder = config['scraping']['folder_images']
-    thumb_folder = config['scraping']['folder_thumbnails']
-    img_file = link['url_img'].split('/')[-1]
-    folder = '{}/{}/'.format(poster_folder, link['year'])
-    while True:
-        try:
-            check_call(['wget', '-P', folder, link['url_img']],
-                       stdout=DEVNULL, stderr=STDOUT)
-            break
-        except:
-            print('Error wget')
+def download_poster(link, size_thumb=(50, 50)):
+    img_bytes = SESSION.get(link, stream=True, verify=False).content
+    img_poster = Image.open(io.BytesIO(img_bytes))
+    base64_poster = base64.b64encode(img_bytes)
+    img_poster.thumbnail(size_thumb, Image.ANTIALIAS)
+    img_thumb_bytes = io.BytesIO()
+    img_poster.save(img_thumb_bytes, format='JPEG')
+    base64_thumb = base64.b64encode(img_thumb_bytes.getvalue())
+    return base64_poster, base64_thumb
 
-    path_img = '{}{}'.format(folder, img_file)
-    path_thumb = '{}/{}/{}'.format(thumb_folder,
-                                   link['year'],
-                                   img_file)
-    str_system = 'convert {} -resize 50x50! {}'.format(
-        path_img, path_thumb)
-    call(str_system, shell=True)
-    link['path_img'] = path_img
-    link['path_thumb'] = path_thumb
-    return link
+
+# def download_poster(link, config):
+#     poster_folder = config['scraping']['folder_images']
+#     thumb_folder = config['scraping']['folder_thumbnails']
+#     img_file = link['url_img'].split('/')[-1]
+#     folder = '{}/{}/'.format(poster_folder, link['year'])
+#     while True:
+#         try:
+#             check_call(['wget', '-P', folder, link['url_img']],
+#                        stdout=DEVNULL, stderr=STDOUT)
+#             break
+#         except:
+#             print('Error wget')
+
+#     path_img = '{}{}'.format(folder, img_file)
+#     path_thumb = '{}/{}/{}'.format(thumb_folder,
+#                                    link['year'],
+#                                    img_file)
+#     str_system = 'convert {} -resize 50x50! {}'.format(
+#         path_img, path_thumb)
+#     call(str_system, shell=True)
+#     link['path_img'] = path_img
+#     link['path_thumb'] = path_thumb
+#     return link
 
 
 def main(argv):
