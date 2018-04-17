@@ -29,8 +29,7 @@ class ApiPosters(Resource):
         ids = [id]
         ids += [int(x) for x in ids_closest['closest_posters'].split(',')]
         fields = (Poster.title_display,
-                  Poster.url_img,
-                  Poster.closest_posters)
+                  Poster.url_img)
 
         data = [self.get_movie_by_id(x, fields) for x in ids]
         return data
