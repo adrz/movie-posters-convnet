@@ -21,16 +21,21 @@ class ApiPosters(Resource):
         """ Retrieve the movie poster with specific id along with
         its closest movie posters
         """
-        id = int(id)
-        print('movie id: {}'.format(id))
-        fields = (Poster.closest_posters)
-        ids_closest = self.get_movie_by_id(id, fields)
 
-        ids = [id]
-        ids += [int(x) for x in ids_closest['closest_posters'].split(',')]
-        fields = (Poster.id,
-                  Poster.title_display,
-                  Poster.url_img)
+        if id == 'idmovies':
+            data = [x._asdict() for
+                    x in self.db.query(Poster.id, Poster.title_display).all()]
+        else:
+            id = int(id)
+            print('movie id: {}'.format(id))
+            fields = (Poster.closest_posters)
+            ids_closest = self.get_movie_by_id(id, fields)
 
-        data = [self.get_movie_by_id(x, fields) for x in ids]
+            ids = [id]
+            ids += [int(x) for x in ids_closest['closest_posters'].split(',')]
+            fields = (Poster.id,
+                      Poster.title_display,
+                      Poster.url_img)
+
+            data = [self.get_movie_by_id(x, fields) for x in ids]
         return data
