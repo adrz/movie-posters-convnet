@@ -13,19 +13,31 @@ Base = declarative_base()
 
 # Hackish to be able to store np.array into sqlite3
 # https://stackoverflow.com/questions/18621513/python-insert-numpy-array-into-sqlite3-database
+# class ARRAY(TypeDecorator):
+#     impl = BINARY
+
+#     def process_bind_param(self, value, dialect):
+#         out = io.BytesIO()
+#         np.save(out, value)
+#         out.seek(0)
+#         return sqlite3.Binary(out.read())
+
+#     def process_result_value(self, value, dialect):
+#         out = io.BytesIO(value)
+#         out.seek(0)
+#         return np.load(out)
+
+
 class ARRAY(TypeDecorator):
-    impl = BINARY
+    impl = String
 
     def process_bind_param(self, value, dialect):
-        out = io.BytesIO()
-        np.save(out, value)
-        out.seek(0)
-        return sqlite3.Binary(out.read())
+        out = ",".join(map(str, value))
+        return out
 
     def process_result_value(self, value, dialect):
-        out = io.BytesIO(value)
-        out.seek(0)
-        return np.load(out)
+        out = np.fromstring(value, sep=',')
+        return out
 
 
 # table schema
@@ -36,8 +48,8 @@ class Poster(Base):
     url_img = Column(String, nullable=True)
     path_img = Column(String, nullable=True)
     path_thumb = Column(String, nullable=True)
-    features = Column(ARRAY, nullable=True)
-    features_pca = Column(ARRAY, nullable=True)
+    features = Column(String, nullable=True)
+    features_pca = Column(String, nullable=True)
     closest_posters = Column(String, nullable=True)
     title_display = Column(String, nullable=True)
     base64_img = Column(String, nullable=True)
