@@ -49,8 +49,6 @@ def get_yearly_url_imgs(year):
     dict_imgs = []
     format_url = '{base}{year}/posters/{link}'
     for itr, tr in enumerate(trs[::2]):
-        print('download: {}/{}'.format(itr,
-                                       len(trs)))
         tds = tr.find_all('td')
         title = tds[0].text
         html_links = [x.get('href') for x in tds[1].find_all('a')]
@@ -141,14 +139,9 @@ def main(argv):
         yearly_urls = p.map(get_yearly_url_imgs, years)
     yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
 
-    print('Downloading posters')
-    with Pool(n_proc) as p:
-        data_download = p.map(partial(download_poster, config=config),
-                              yearly_urls)
-
     # push to db
     session = db_manager.get_db(config['general']['db_uri'])
-    objects = [db_manager.Poster(x) for x in data_download]
+    objects = [db_manager.Poster(x) for x in yearly_urls]
 
     session.bulk_save_objects(objects)
     session.commit()
