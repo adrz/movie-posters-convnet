@@ -10,6 +10,7 @@ from operator import mul
 from keras.preprocessing import image
 from keras.applications.imagenet_utils import preprocess_input
 from keras.applications.vgg16 import VGG16
+from keras.applications.resnet50 import ResNet50
 
 import utils
 import db_manager
@@ -28,7 +29,7 @@ def get_features(model, data, db):
             poster.path_img, i+1, n_posters))
         # Resize image to be 224x224
         img = image.load_img(poster.path_img,
-                             target_size=(224, 224))
+                             target_size=(img_width, img_height))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
@@ -42,6 +43,9 @@ def get_features(model, data, db):
 def load_model(config):
     if config['features']['model'] == 'vgg16':
         return VGG16(weights='imagenet', include_top=False)
+
+    if config['features']['model'] == 'resnet50':
+        return ResNet50(weights='imagenet', include_top=False)
 
 
 def main(argv):
