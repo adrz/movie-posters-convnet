@@ -32,11 +32,17 @@ class ARRAY(TypeDecorator):
     impl = String
 
     def process_bind_param(self, value, dialect):
-        out = ",".join(map(str, value))
+        if value.shape:
+            out = ",".join(map(str, value))
+        else:
+            out = ''
         return out
 
     def process_result_value(self, value, dialect):
-        out = np.fromstring(value, sep=',')
+        if value == '':
+            out = np.array(None)
+        else:
+            out = np.fromstring(value, sep=',')
         return out
 
 
@@ -63,8 +69,8 @@ class Poster(Base):
             self.url_img = dict_poster.get('url_img', '')
             self.path_img = dict_poster.get('path_img', '')
             self.path_thumb = dict_poster.get('path_thumb', '')
-            self.features = dict_poster.get('features', np.array(None))
-            self.features_pca = dict_poster.get('features_pca', np.array(None))
+            self.features = dict_poster.get('features', '')
+            self.features_pca = dict_poster.get('features_pca', '')
             self.closest_posters = dict_poster.get('closest_posters', '')
             self.title_display = dict_poster.get('title_display', '')
             self.base64_img = dict_poster.get('base64_img', '')
