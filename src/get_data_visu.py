@@ -3,16 +3,9 @@
 
 
 from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from MulticoreTSNE import MulticoreTSNE as TSNE_multi
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.metrics.pairwise import euclidean_distances
-import pandas as pd
 import numpy as np
-import json
 import sys
-import os
-import pickle
 import argparse
 
 import utils
@@ -22,21 +15,21 @@ import db_manager
 def scale_coords(coords, width=800, height=800):
     """ Scale the coordinate to fit within a specific range
     """
-    minx = min(coords[:, 0])
-    miny = min(coords[:, 1])
-    maxx = max(coords[:, 0])
-    maxy = max(coords[:, 1])
+    minx, miny = min(coords[:, 0]), min(coords[:, 1])
+    maxx, maxx = max(coords[:, 0]), max(coords[:, 1])
 
     scale_x = width / (maxx - minx)
     scale_y = height / (maxy - miny)
 
     scaled = [[(x[0] - minx) * scale_x,
-               (x[1] - min_y) * scale_y]
+               (x[1] - miny) * scale_y]
               for x in coords]
     return scaled
 
 
 def get_PCA_features(data, n_components):
+    """ Dimensional reduction of the features
+    """
     features = np.array([x.features for x in data])
     pca = PCA(n_components=n_components, whiten=True)
     X = pca.fit_transform(features)
@@ -46,6 +39,9 @@ def get_PCA_features(data, n_components):
 # Function getting the closest 6 movie posters for all the movie posters
 # Far from being a beautiful code...
 def get_closest_features(data, db, config):
+    """ Compute PCA and use cosine_similarity to compute "distance"
+    between each posters
+    """
     X = get_PCA_features(data, config['features']['pca_n_components'])
 
     # Could become HUGE !
@@ -58,10 +54,9 @@ def get_closest_features(data, db, config):
     idx_bests = idx_bests[:, ::-1]
     idx_keep = idx_bests[:, 0:6]
 
-    closest_urls = []
     for d, idxs in zip(data, idx_keep):
         # d.closest_posters = ';'.join([data[x].url_img for x in idxs])
-        d.closest_posters = ','.join(idxs+1)
+        d.closest_posters = ','.join(map(str, idxs+1))
 
     db.commit()
 
