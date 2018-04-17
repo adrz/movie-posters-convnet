@@ -58,6 +58,7 @@ class Poster(Base):
             self.base64_img = dict_poster.get('base64_img', '')
             self.base64_thumb = dict_poster.get('base64_thumb', '')
 
+
 def get_db(uri):
     engine = create_engine(uri)
     if not engine.dialect.has_table(engine, 'poster'):
