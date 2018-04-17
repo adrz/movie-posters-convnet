@@ -120,17 +120,17 @@ def main(argv):
                   config['scraping']['years_range'][1]+1)
     n_proc = config['scraping']['n_proc']
 
-    print('Creating folders for posters and thumbnails')
+    # print('Creating folders for posters and thumbnails')
 
-    folder_posters = config['scraping']['folder_images']
-    folder_thumbs = config['scraping']['folder_thumbnails']
-    folders_to_create = [folder_posters, folder_thumbs]
-    folders_to_create += [os.path.join(folder_posters, str(x))
-                          for x in years]
-    folders_to_create += [os.path.join(folder_thumbs, str(x))
-                          for x in years]
+    # folder_posters = config['scraping']['folder_images']
+    # folder_thumbs = config['scraping']['folder_thumbnails']
+    # folders_to_create = [folder_posters, folder_thumbs]
+    # folders_to_create += [os.path.join(folder_posters, str(x))
+    #                       for x in years]
+    # folders_to_create += [os.path.join(folder_thumbs, str(x))
+    #                       for x in years]
 
-    [utils.create_folder(folder) for folder in folders_to_create]
+    # [utils.create_folder(folder) for folder in folders_to_create]
 
     print('Retrieve url of posters')
     # yearly_urls = [get_yearly_url_imgs(x)
