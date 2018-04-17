@@ -32,14 +32,14 @@ class ARRAY(TypeDecorator):
     impl = String
 
     def process_bind_param(self, value, dialect):
-        if value.shape:
+        if value is not None:
             out = ",".join(map(str, value))
         else:
             out = ''
         return out
 
     def process_result_value(self, value, dialect):
-        if value == '':
+        if value is None:
             out = np.array(None)
         else:
             out = np.fromstring(value, sep=',')
