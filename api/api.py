@@ -38,6 +38,4 @@ class ApiPosters(Resource):
                       Poster.base64_img)
 
             data = [self.get_movie_by_id(x, fields) for x in ids]
-            for d in data:
-                d['base64_img'] = d['base64_img'].decode("utf-8")
         return data
