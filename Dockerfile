@@ -5,9 +5,12 @@ COPY requirements.txt /tmp/requirements.txt
 
 RUN apk add --no-cache \
     python3 \
+    python3-dev \
     bash \
     nginx \
     uwsgi \
+    libpcre3 \
+    libpcre3-dev \
     uwsgi-python3 \
     supervisor && \
     python3 -m ensurepip && \
@@ -16,6 +19,7 @@ RUN apk add --no-cache \
     pip3 install -r /tmp/requirements.txt && \
     rm /etc/nginx/conf.d/default.conf && \
     rm -r /root/.cache
+
 
 # Copy the Nginx global conf
 COPY nginx.conf /etc/nginx/

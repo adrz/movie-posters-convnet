@@ -32,8 +32,15 @@ document.getElementById('random').onclick = function() {
     retrieve_movie(idx_rnd);
 }
 
+$body = $("body");
 
-url_api = 'http://home.iwoaf.com:5000/v1/';
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+    ajaxStop: function() { $body.removeClass("loading"); }    
+});
+
+url_api = 'http://35.196.172.250/v1/';
 
 $(document).ready(function() {
     crossDomain: true;
@@ -67,4 +74,4 @@ function retrieve_movie(id) {
 	    updatePage();
         }
     });
-}
+};

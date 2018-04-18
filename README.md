@@ -168,6 +168,7 @@ sudo dpkg-reconfigure locales
 
 sudo apt install -y python-pip
 sudo apt install -y python-virtualenv
+sudo apt install -y libpcre3 libpcre3-dev
 
 cd movie-posters-convnet
 virtualenv -p python3 env
@@ -177,3 +178,44 @@ sudo docker run --name some-postgres -e POSTGRES_PASSWORD=m -d -p 5432:5432 post
 
 PGPASSWORD=m psql -h 0.0.0.0 -U postgres -c 'create database movieposters;'
 PGPASSWORD=m psql -h 0.0.0.0 -U postgres movieposters < ../moviedb.db
+
+
+## 
+sudo apt install -y nginx
+sudo apt install -y uwsgi
+
+
+sudo apt install uwsgi-plugin-python
+
+
+
+
+### In file /etc/systemd/system/movieposters.service
+[Unit]
+Description=uWSGI instance to serve myproject
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/home/adrien/movie-posters-convnet
+Environment="PATH=/home/adrien/movie-posters-convnet/env/bin"
+ExecStart=/home/adrien/movie-posters-convnet/env/bin/uwsgi --ini uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+## in file /etc/nginx/sites-available/movieposters
+server {
+    listen 80;
+    server_name 35.196.172.250;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/tmp/uwsgi.sock;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/movieposters /etc/nginx/sites-enabled
