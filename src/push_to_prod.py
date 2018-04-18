@@ -27,6 +27,6 @@ def create_db_prod(uri_db_dev, uri_db_prod, path_img, path_thumb):
                                 Poster.base64_thumb).all()
     for p in data_posters:
         img = pil_image.open(BytesIO(base64.b64decode(p.base64_img)))
-        img.save('path_img/{].jpg'.format(Poster.id))
+        img.save('{}/{}.jpg'.format(path_img, Poster.id))
         img_thumb = pil_image.open(BytesIO(base64.b64decode(p.base64_thumb)))
-        img_thumb.save('path_img/{].jpg'.format(Poster.id))
+        img_thumb.save('{}/{}.jpg'.format(path_thumb, Poster.id))
