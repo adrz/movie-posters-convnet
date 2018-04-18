@@ -77,6 +77,13 @@ class Poster(Base):
             self.base64_thumb = dict_poster.get('base64_thumb', '')
 
 
+class PosterWeb(Base):
+    __tablename__ = 'poster'
+    id = Column(Integer, primary_key=True)
+    closest_posters = Column(ARRAY, nullable=True)
+    title_display = Column(String, nullable=True)
+
+
 def get_db(uri):
     engine = create_engine(uri)
     if not engine.dialect.has_table(engine, 'poster'):
