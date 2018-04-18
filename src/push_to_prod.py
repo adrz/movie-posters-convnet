@@ -18,7 +18,7 @@ def create_db_prod(uri_db_dev, uri_db_prod, path_img, path_thumb):
                  for x in data_dev]
 
     db_prod.bulk_save_objects(data_prod)
-
+    db_prod.commit()
     create_folder(path_img)
     create_folder(path_thumb)
 
