@@ -83,6 +83,11 @@ class PosterWeb(Base):
     closest_posters = Column(ARRAY, nullable=True)
     title_display = Column(String, nullable=True)
 
+    def __init__(self, id, closest_posters, title_display):
+        self.id = id
+        self.closest_posters = closest_posters
+        self.title_display = title_display
+
 
 def get_db(uri):
     engine = create_engine(uri)
