@@ -129,3 +129,51 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * d3js plot: from [https://github.com/douglasbagnall/image-tsne](https://github.com/douglasbagnall/image-tsne)
 * [VGG-16 pre-trained model for Keras](https://gist.github.com/baraldilorenzo/07d7802847aaad0a35d3)
 * posters: [IMP Awards](http://impawards.com)
+
+
+
+<!-- ## Postgresql -->
+<!-- sudo -u postgres createuser movieposters -->
+<!-- sudo -u postgres createdb movieposters -->
+<!-- sudo -u postgres psql -->
+<!-- alter user movieposters with encrypted password 'm'; -->
+<!-- grant all privileges on database movieposters to movieposters ; -->
+
+
+## Server install
+ssh root@51.15.248.42
+# ssh adrien@35.196.172.250
+
+### Download database
+wget https://gist.githubusercontent.com/adrz/2484cccdc5624a2d36c4d3a46499a72a/raw/97be9f24300d10f1d266cb66593a25588ca77c16/google_drive.py
+python google_drive.py 1RdtQ_FMrsPfgTsFi2T2WTRa88FdiTDUA movie.zip
+sudo apt install -y zip
+unzip movie.zip
+rm movie.zip
+
+### Install docker+docker-compose
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get update
+sudo apt-get install -y docker-ce
+sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+git clone https://github.com/adrz/movie-posters-convnet
+
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+sudo dpkg-reconfigure locales
+
+sudo apt install -y python-pip
+sudo apt install -y python-virtualenv
+
+cd movie-posters-convnet
+virtualenv -p python3 env
+source env/bin/activate
+pip install -r requirements.txt
+sudo docker run --name some-postgres -e POSTGRES_PASSWORD=m -d -p 5432:5432 postgres
+
+PGPASSWORD=m psql -h 0.0.0.0 -U postgres -c 'create database movieposters;'
+PGPASSWORD=m psql -h 0.0.0.0 -U postgres movieposters < ../moviedb.db

@@ -14,7 +14,6 @@ class ApiPosters(Resource):
             result = self.db.query(fields).filter_by(id=id).first()._asdict()
         else:
             result = self.db.query(*fields).filter_by(id=id).first()._asdict()
-        print('result: {}'.format(result))
         return result
 
     def get(self, id):

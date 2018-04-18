@@ -39,7 +39,7 @@ class ARRAY(TypeDecorator):
         return out
 
     def process_result_value(self, value, dialect):
-        if value is None:
+        if value is None or value == '':
             out = np.array(None)
         else:
             out = np.fromstring(value, sep=',')
