@@ -32,7 +32,7 @@ class ApiPosters(Resource):
             ids_closest = self.get_movie_by_id(id, fields)
 
             ids = [id]
-            ids += [int(x) for x in ids_closest['closest_posters']]
+            ids += [int(x) for x in ids_closest['closest_posters'].split(',')]
             fields = (PosterWeb.id,
                       PosterWeb.title_display)
 
