@@ -5,7 +5,7 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 
 class ApiPosters(Resource):
-    def __init__(self, path_config='./config/development.conf'):
+    def __init__(self, path_config='./config/production.conf'):
         self.config = read_config(path_config)
         self.db = get_db(self.config['general']['db_uri'])
 
