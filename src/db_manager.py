@@ -80,7 +80,7 @@ class Poster(Base):
 class PosterWeb(Base):
     __tablename__ = 'posterweb'
     id = Column(Integer, primary_key=True)
-    closest_posters = Column(ARRAY, nullable=True)
+    closest_posters = Column(String, nullable=True)
     title_display = Column(String, nullable=True)
 
     def __init__(self, id, closest_posters, title_display):
