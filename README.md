@@ -179,7 +179,6 @@ source env/bin/activate
 pip install -r requirements.txt
 pip install psycopg2-binary
 pip install uwsgi
-pip install uwsgi-plugin-python3
 sudo docker run --name some-postgres --restart unless-stopped -e POSTGRES_PASSWORD=m -d -p 5432:5432 postgres
 
 sudo apt install -y postgresql-client
@@ -195,21 +194,9 @@ sudo apt install -y uwsgi
 ### nginx / web
 
 
-### In file movieposters.service
-[Unit]
-Description=uWSGI instance to serve myproject
-After=network.target
+### In file /etc/systemd/system/movieposters.service
 
-[Service]
-User=www-data
-Group=www-data
-WorkingDirectory=/home/adrien/movie-posters-convnet
-Environment="PATH=/home/adrien/movie-posters-convnet/env/bin"
-ExecStart=/home/adrien/movie-posters-convnet/env/bin/uwsgi --ini uwsgi.ini
-
-[Install]
-WantedBy=multi-user.target
-
+sudo cp movieposters.service /etc/systemd/system/movieposters.service
 
 sudo systemctl enable movieposters
 
