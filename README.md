@@ -146,7 +146,7 @@ ssh root@51.15.248.42
 
 ### Download database
 wget https://gist.githubusercontent.com/adrz/2484cccdc5624a2d36c4d3a46499a72a/raw/97be9f24300d10f1d266cb66593a25588ca77c16/google_drive.py
-python google_drive.py 1RdtQ_FMrsPfgTsFi2T2WTRa88FdiTDUA movie.zip
+python google_drive.py 1k2sy5Ncjr2L6LgM12Nc_W0Ht_WjiFa2q data.tar.gz
 sudo apt install -y zip
 unzip movie.zip
 rm movie.zip
@@ -176,8 +176,8 @@ source env/bin/activate
 pip install -r requirements.txt
 sudo docker run --name some-postgres -e POSTGRES_PASSWORD=m -d -p 5432:5432 postgres
 
-PGPASSWORD=m psql -h 0.0.0.0 -U postgres -c 'create database movieposters;'
-PGPASSWORD=m psql -h 0.0.0.0 -U postgres movieposters < ../moviedb.db
+PGPASSWORD=m psql -h 0.0.0.0 -U postgres -c 'create database moviepostersweb;'
+PGPASSWORD=m psql -h 0.0.0.0 -U postgres moviepostersweb < data/moviesweb.db
 
 
 ## 
@@ -187,6 +187,8 @@ sudo apt install -y uwsgi
 
 sudo apt install uwsgi-plugin-python
 
+
+### nginx / web
 
 
 
