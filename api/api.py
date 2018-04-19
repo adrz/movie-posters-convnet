@@ -23,7 +23,8 @@ class ApiPosters(Resource):
 
         if id == 'idmovies':
             data = {x[1]: x[0] for
-                    x in self.db.query(PosterWeb.id, PosterWeb.title_display).all()}
+                    x in self.db.query(PosterWeb.id,
+                                       PosterWeb.title_display).all()}
         else:
             id = int(id)
             print('movie id: {}'.format(id))
@@ -31,7 +32,7 @@ class ApiPosters(Resource):
             ids_closest = self.get_movie_by_id(id, fields)
 
             ids = [id]
-            ids += [int(x) for x in ids_closest['closest_posters'].split(',')]
+            ids += [int(x) for x in ids_closest['closest_posters']]
             fields = (PosterWeb.id,
                       PosterWeb.title_display,
                       PosterWeb.base64_img)
