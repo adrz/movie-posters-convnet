@@ -198,6 +198,7 @@ sudo apt install -y uwsgi
 
 sudo cp movieposters.service /etc/systemd/system/movieposters.service
 
+sudo service movieposters start
 sudo systemctl enable movieposters
 
 ## in file /etc/nginx/sites-available/movieposters
@@ -214,4 +215,14 @@ server {
 sudo cp flask-site-nginx.conf /etc/nginx/sites-available/movieposters
 
 sudo rm -rf /etc/nginx/sites-available/default
+sudo rm -rf /etc/nginx/sites-enabled/default
 sudo ln -s /etc/nginx/sites-available/movieposters /etc/nginx/sites-enabled/movieposters
+
+
+### Bootstrap:
+scw exec ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1
+
+
+
+
+
