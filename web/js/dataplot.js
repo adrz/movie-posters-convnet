@@ -10,10 +10,10 @@ function updatePosters(event){
 function updatePage() {
     $('input:first').val(myData[0].title_display);
     console.log(myData[0].url_img);
-    $("#poster-img").attr("src", 'data:image/jpeg;base64,'+myData[0].base64_img);
+    $("#poster-img").attr("src", 'data/posters/'+myData[0].id + '.jpg');
     for (var i = 1; i < 7; i++)
     {
-	$("#poster-img"+i).attr("src", 'data:image/jpeg;base64,'+myData[i].base64_img);
+	$("#poster-img"+i).attr("src", 'data/posters/'+myData[i].id+'.jpg');
     }
 }
 
@@ -40,7 +40,7 @@ $(document).on({
     ajaxStop: function() { $body.removeClass("loading"); }    
 });
 
-url_api = 'http://35.196.172.250/v1/';
+url_api = 'http://51.15.248.42/v1/';
 
 $(document).ready(function() {
     crossDomain: true;
