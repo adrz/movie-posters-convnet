@@ -56,7 +56,8 @@ def get_closest_features(data, db, config):
     idx_keep = idx_bests[:, 0:6]
 
     for d, idxs in zip(data, idx_keep):
-        d.closest_posters = ','.join(map(str, idxs+1))
+        ids = [data[j].id for j in idx_keep]
+        d.closest_posters = ','.join(map(str, ids))
 
     db.commit()
 
@@ -105,7 +106,7 @@ def main(argv):
 
     db = db_manager.get_db(config['general']['db_uri'])
 
-    data = db.query(Poster).order_by(Poster.id)
+    data = db.query(Poster.id, Poster.features).order_by(Poster.id)
 
     data_features = get_closest_features(data, db, config)
     print(data_features)
