@@ -102,7 +102,6 @@ def main(argv):
                         default="./config/development.conf")
     args = parser.parse_args()
     config = utils.read_config(args.config)
-    data, db = db_manager.get_all_data(config['general']['db_uri'])
 
     db = db_manager.get_db(config['general']['db_uri'])
 
