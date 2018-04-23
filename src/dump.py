@@ -18,9 +18,9 @@ def main(argv):
     config2 = utils.read_config(args.config2)
 
     print(config1)
-    print(config1['uri_db'])
-    print(config2['uri_db'])
-    copy_db_dev_prod(config1['uri_db'], config2['uri_db'])
+    print(config1['general']['db_uri'])
+    print(config2['general']['db_uri'])
+    copy_db_dev_prod(config1['general']['db_uri'], config2['general']['db_uri'])
 
 
 if __name__ == "__main__":
