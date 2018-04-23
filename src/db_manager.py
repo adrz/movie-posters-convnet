@@ -100,6 +100,11 @@ def get_db(uri):
     return session
 
 
+def drop_posterweb(uri):
+    engine = create_engine(uri)
+    PosterWeb.__table__.drop(engine)
+
+
 def get_all_data(uri):
     db = get_db(uri)
     return db.query(Poster).all(), db
