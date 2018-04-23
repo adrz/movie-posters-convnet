@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve myproject
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/home/adrien/movie-posters-convnet
+Environment="PATH=/home/adrien/movie-posters-convnet/env/bin"
+ExecStart=/home/adrien/movie-posters-convnet/env/bin/uwsgi --ini uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target

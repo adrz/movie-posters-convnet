@@ -13,3 +13,4 @@ scikit_learn==0.19.1
 flask_cors==3.0.3
 Flask==0.12.2
 requests==2.18.4
+psycopg2==2.7.4

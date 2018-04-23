@@ -144,12 +144,14 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ssh root@51.15.248.42
 # ssh adrien@35.196.172.250
 
+sudo apt install git python-requests software-properties-common \
+	python-software-properties \
+	apt-transport-https
+
 ### Download database
-wget https://gist.githubusercontent.com/adrz/2484cccdc5624a2d36c4d3a46499a72a/raw/97be9f24300d10f1d266cb66593a25588ca77c16/google_drive.py
-python google_drive.py 1RdtQ_FMrsPfgTsFi2T2WTRa88FdiTDUA movie.zip
-sudo apt install -y zip
-unzip movie.zip
-rm movie.zip
+wget https://gist.githubusercontent.com/adrz/2484cccdc5624a2d36c4d3a46499a72a/raw/7b13cd932c3425525e064dd19ede221c3725d242/google_drive.py
+python google_drive.py 1k2sy5Ncjr2L6LgM12Nc_W0Ht_WjiFa2q ./data.tar.gz
+tar -xzf data.tar.gz
 
 ### Install docker+docker-compose
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -161,19 +163,66 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 
 git clone https://github.com/adrz/movie-posters-convnet
+git clone -b development https://github.com/adrz/movie-posters-convnet
+
 
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
-sudo dpkg-reconfigure locales
+sudo dpkg-reconfigure -f noninteractive locales
 
-sudo apt install -y python-pip
-sudo apt install -y python-virtualenv
+sudo apt install -y python-pip python3-dev python-virtualenv libpcre3 libpcre3-dev
 
+mv data/ movie-posters-convnet/
 cd movie-posters-convnet
 virtualenv -p python3 env
 source env/bin/activate
 pip install -r requirements.txt
-sudo docker run --name some-postgres -e POSTGRES_PASSWORD=m -d -p 5432:5432 postgres
+pip install psycopg2-binary
+pip install uwsgi
+sudo docker run --name some-postgres --restart unless-stopped -e POSTGRES_PASSWORD=m -d -p 5432:5432 postgres
 
-PGPASSWORD=m psql -h 0.0.0.0 -U postgres -c 'create database movieposters;'
-PGPASSWORD=m psql -h 0.0.0.0 -U postgres movieposters < ../moviedb.db
+sudo apt install -y postgresql-client
+PGPASSWORD=m psql -h 0.0.0.0 -U postgres -c 'create database moviepostersweb;'
+PGPASSWORD=m psql -h 0.0.0.0 -U postgres moviepostersweb < data/moviesweb.db
+
+
+## 
+sudo apt install -y nginx
+sudo apt install -y uwsgi
+
+
+### nginx / web
+
+
+### In file /etc/systemd/system/movieposters.service
+
+sudo cp movieposters.service /etc/systemd/system/movieposters.service
+
+sudo service movieposters start
+sudo systemctl enable movieposters
+
+## in file /etc/nginx/sites-available/movieposters
+server {
+    listen 80;
+    server_name 35.196.172.250;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/tmp/uwsgi.sock;
+    }
+}
+
+sudo cp flask-site-nginx.conf /etc/nginx/sites-available/movieposters
+
+sudo rm -rf /etc/nginx/sites-available/default
+sudo rm -rf /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/sites-available/movieposters /etc/nginx/sites-enabled/movieposters
+
+
+### Bootstrap:
+scw exec ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1
+
+
+
+
+

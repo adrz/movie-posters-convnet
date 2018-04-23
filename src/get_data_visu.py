@@ -10,6 +10,7 @@ import argparse
 
 import utils
 import db_manager
+from db_manager import Poster
 
 
 def scale_coords(coords, width=800, height=800):
@@ -55,7 +56,6 @@ def get_closest_features(data, db, config):
     idx_keep = idx_bests[:, 0:6]
 
     for d, idxs in zip(data, idx_keep):
-        # d.closest_posters = ';'.join([data[x].url_img for x in idxs])
         d.closest_posters = ','.join(map(str, idxs+1))
 
     db.commit()
@@ -66,14 +66,14 @@ def get_closest_features(data, db, config):
 #                           perplexity=40, n_jobs=2,
 #                           output_file, tsne_alg='sklearn'):
 #     df_json = df.sample(n_samples)
-
 #     # n_components fixed to 200
 #     pca = PCA(n_components=200, whiten=True)
 
 #     if tsne_alg == 'sklearn':
 #         tsne = TSNE(n_components=2, perplexity=perplexity)
 #     else:
-#         tsne = TSNE_multi(n_components=2, perplexity=perplexity, n_jobs=n_jobs)
+#          tsne = TSNE_multi(n_components=2, perplexity=perplexity,
+#                            n_jobs=n_jobs)
 
 #     data = np.array(list(df_json['features']))
 
@@ -102,6 +102,10 @@ def main(argv):
     args = parser.parse_args()
     config = utils.read_config(args.config)
     data, db = db_manager.get_all_data(config['general']['db_uri'])
+
+    db = db_manager.get_db(config['general']['db_uri'])
+
+    data = db.query(Poster).order_by(Poster.id)
 
     data_features = get_closest_features(data, db, config)
     print(data_features)

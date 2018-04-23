@@ -1,6 +1,8 @@
 import unittest
 from src.utils import (read_config, create_folder)
 import os
+import base64
+from PIL import Image as pil_image
 
 
 class UtilsTest(unittest.TestCase):

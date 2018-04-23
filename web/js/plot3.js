@@ -82,26 +82,11 @@ function plot(json, size){
 	    .attr("transform", transform)
 	    .attr('width', w)
 	    .attr('height',h);
-
-        // var e = d3.event;
-        // var w = size[0] / e.scale;
-        // var h = size[1] / e.scale;
-        // var transform = 'translate(' + e.translate + ')' +' scale(' + e.scale + ')';
-        // svg.selectAll('image')
-        //     .attr('transform', transform)
-        //     .attr('width', w)
-        //     .attr('height', h);
     });
 }
 
 function updateWindow(){
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    // d3.select("svg")
-    //     .attr("width", w/2-10)
-    //     .attr("height", (w/2-10)*2/3);
-    // d3.selectAll('img')
-    //     .attr('id', 'current_img')
-    //     .attr('height', (w/2-10)*2/3);
 }
 window.onresize = updateWindow;
 

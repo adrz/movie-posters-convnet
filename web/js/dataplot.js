@@ -1,6 +1,9 @@
 myData = [];
 map_id_title = {};
 
+url_www = 'http://51.15.248.42/';
+
+
 function updatePosters(event){
     var title = $('input:first').val();
     retrieve_movie(map_id_title[title]);
@@ -10,10 +13,10 @@ function updatePosters(event){
 function updatePage() {
     $('input:first').val(myData[0].title_display);
     console.log(myData[0].url_img);
-    $("#poster-img").attr("src", 'data:image/jpeg;base64,'+myData[0].base64_img);
+    $("#poster-img").attr("src", url_www+'data/posters/'+(myData[0].id-1) + '.jpg');
     for (var i = 1; i < 7; i++)
     {
-	$("#poster-img"+i).attr("src", 'data:image/jpeg;base64,'+myData[i].base64_img);
+	$("#poster-img"+i).attr("src", url_www+'data/posters/'+(myData[i].id-1)+'.jpg');
     }
 }
 
@@ -32,8 +35,15 @@ document.getElementById('random').onclick = function() {
     retrieve_movie(idx_rnd);
 }
 
+$body = $("body");
 
-url_api = 'http://home.iwoaf.com:5000/v1/';
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+    ajaxStop: function() { $body.removeClass("loading"); }    
+});
+
+url_api = 'http://51.15.248.42/v1/';
 
 $(document).ready(function() {
     crossDomain: true;
@@ -67,4 +77,4 @@ function retrieve_movie(id) {
 	    updatePage();
         }
     });
-}
+};

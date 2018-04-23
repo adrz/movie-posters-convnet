@@ -77,9 +77,23 @@ class Poster(Base):
             self.base64_thumb = dict_poster.get('base64_thumb', '')
 
 
+class PosterWeb(Base):
+    __tablename__ = 'posterweb'
+    id = Column(Integer, primary_key=True)
+    closest_posters = Column(String, nullable=True)
+    title_display = Column(String, nullable=True)
+
+    def __init__(self, id, closest_posters, title_display):
+        self.id = id
+        self.closest_posters = closest_posters
+        self.title_display = title_display
+
+
 def get_db(uri):
     engine = create_engine(uri)
     if not engine.dialect.has_table(engine, 'poster'):
+        Base.metadata.create_all(engine)
+    if not engine.dialect.has_table(engine, 'posterweb'):
         Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()

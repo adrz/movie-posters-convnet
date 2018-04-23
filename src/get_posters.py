@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
+
 import sys
 import io
 from bs4 import BeautifulSoup
 from urllib import request
 import requests
 import argparse
-from subprocess import DEVNULL, STDOUT, check_call, call
 from multiprocessing import Pool
 import itertools
-from functools import partial
 import utils
 import db_manager
 import re
@@ -83,31 +81,6 @@ def download_poster(link, size_thumb=(50, 50)):
     return base64_poster, base64_thumb
 
 
-# def download_poster(link, config):
-#     poster_folder = config['scraping']['folder_images']
-#     thumb_folder = config['scraping']['folder_thumbnails']
-#     img_file = link['url_img'].split('/')[-1]
-#     folder = '{}/{}/'.format(poster_folder, link['year'])
-#     while True:
-#         try:
-#             check_call(['wget', '-P', folder, link['url_img']],
-#                        stdout=DEVNULL, stderr=STDOUT)
-#             break
-#         except:
-#             print('Error wget')
-
-#     path_img = '{}{}'.format(folder, img_file)
-#     path_thumb = '{}/{}/{}'.format(thumb_folder,
-#                                    link['year'],
-#                                    img_file)
-#     str_system = 'convert {} -resize 50x50! {}'.format(
-#         path_img, path_thumb)
-#     call(str_system, shell=True)
-#     link['path_img'] = path_img
-#     link['path_thumb'] = path_thumb
-#     return link
-
-
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config',
@@ -120,21 +93,7 @@ def main(argv):
                   config['scraping']['years_range'][1]+1)
     n_proc = config['scraping']['n_proc']
 
-    # print('Creating folders for posters and thumbnails')
-
-    # folder_posters = config['scraping']['folder_images']
-    # folder_thumbs = config['scraping']['folder_thumbnails']
-    # folders_to_create = [folder_posters, folder_thumbs]
-    # folders_to_create += [os.path.join(folder_posters, str(x))
-    #                       for x in years]
-    # folders_to_create += [os.path.join(folder_thumbs, str(x))
-    #                       for x in years]
-
-    # [utils.create_folder(folder) for folder in folders_to_create]
-
     print('Retrieve url of posters')
-    # yearly_urls = [get_yearly_url_imgs(x)
-    #                for x in years]
     with Pool(n_proc) as p:
         yearly_urls = p.map(get_yearly_url_imgs, years)
     yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
