@@ -105,7 +105,9 @@ def main(argv):
 
     db = db_manager.get_db(config['general']['db_uri'])
 
-    data = [x for x in db.query(Poster.id, Poster.features).limit(10)]
+    data = [x for x in db.query(Poster.id,
+                                Poster.features,
+                                Poster.closest_posters).limit(10)]
 
     data_features = get_closest_features(data, db, config)
     print(data_features)
