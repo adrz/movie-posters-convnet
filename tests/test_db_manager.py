@@ -1,5 +1,6 @@
 import unittest
-from src.db_manager import (Base, ARRAY, Poster, get_db, get_all_data)
+from src.db_manager import (Base, ARRAY, Poster, PosterWeb,
+                            get_db)
 import numpy as np
 from sqlalchemy.types import TypeDecorator
 from sqlalchemy.orm.session import Session
@@ -25,12 +26,27 @@ class DbManagerTest(unittest.TestCase):
                        'features': np.array([1, 2, 3]),
                        'features_pca': np.array([1, 2]),
                        'closest_posters': '',
-                       'title_display': 'dfs'}
+                       'title_display': 'dfs',
+                       'base64_img': 'b343',
+                       'base64_thumb': 'b13434'}
         poster_b = Poster(dict_poster)
 
         dict_poster_b = poster_b.__dict__
         del(dict_poster_b['_sa_instance_state'])
 
+        self.assertTrue(dict_poster_b == dict_poster)
+
+    def test_PosterWeb(self):
+        poster_b = PosterWeb(1, 'blabla', 'blablabla')
+
+        self.assertTrue(isinstance(
+            poster_b, Base))
+
+        dict_poster = {'id': 1,
+                       'closest_posters': 'blabla',
+                       'title_display': 'blablabla'}
+        dict_poster_b = poster_b.__dict__
+        del(dict_poster_b['_sa_instance_state'])
         self.assertTrue(dict_poster_b == dict_poster)
 
     def test_read_write_Poster(self):

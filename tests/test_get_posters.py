@@ -42,7 +42,7 @@ class UtilsGetPosters(unittest.TestCase):
 
     def test_download_poster(self):
         link = self.dict_imgs_1913[0]
-        img, thumb = download_poster(link, size_thumb=(50, 50))
+        img, thumb = download_poster(link['url_img'], size_thumb=(50, 50))
         self.assertTrue(isinstance(img, str))
         self.assertTrue(isinstance(thumb, str))
 

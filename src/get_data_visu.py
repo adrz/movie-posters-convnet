@@ -66,14 +66,14 @@ def get_closest_features(data, db, config):
 #                           perplexity=40, n_jobs=2,
 #                           output_file, tsne_alg='sklearn'):
 #     df_json = df.sample(n_samples)
-
 #     # n_components fixed to 200
 #     pca = PCA(n_components=200, whiten=True)
 
 #     if tsne_alg == 'sklearn':
 #         tsne = TSNE(n_components=2, perplexity=perplexity)
 #     else:
-#         tsne = TSNE_multi(n_components=2, perplexity=perplexity, n_jobs=n_jobs)
+#          tsne = TSNE_multi(n_components=2, perplexity=perplexity,
+#                            n_jobs=n_jobs)
 
 #     data = np.array(list(df_json['features']))
 
