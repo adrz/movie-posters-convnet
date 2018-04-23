@@ -9,7 +9,7 @@ def copy_db_dev_prod(uri_db_dev, uri_db_prod):
     db_dev = get_db(uri_db_dev)
     db_prod = get_db(uri_db_prod)
 
-    PosterWeb.__table__.drop(db_prod)
+    # PosterWeb.__table__.drop(db_prod)
 
     data_dev = db_dev.query(Poster.id,
                             Poster.closest_posters,
