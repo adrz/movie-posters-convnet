@@ -10,6 +10,7 @@ import argparse
 
 import utils
 import db_manager
+from db_manager import Poster
 
 
 def scale_coords(coords, width=800, height=800):
@@ -55,7 +56,6 @@ def get_closest_features(data, db, config):
     idx_keep = idx_bests[:, 0:6]
 
     for d, idxs in zip(data, idx_keep):
-        # d.closest_posters = ';'.join([data[x].url_img for x in idxs])
         d.closest_posters = ','.join(map(str, idxs+1))
 
     db.commit()
@@ -102,6 +102,10 @@ def main(argv):
     args = parser.parse_args()
     config = utils.read_config(args.config)
     data, db = db_manager.get_all_data(config['general']['db_uri'])
+
+    db = db_manager.get_db(config['general']['db_uri'])
+
+    data = db.query(Poster).order_by(Poster.id)
 
     data_features = get_closest_features(data, db, config)
     print(data_features)

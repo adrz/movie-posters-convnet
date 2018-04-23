@@ -6,7 +6,7 @@ imageid=$(echo $v | awk '{print $3}')
 # done
 
 for i in {10..13}; do
-    scw create --name="www-$i" --ip-address=none --commercial-type=VC1M $imageid
+    scw create --name="www-$i" --ip-address=none --commercial-type=VC1S $imageid
 done
 
 
