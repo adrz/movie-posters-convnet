@@ -10,45 +10,41 @@ import shutil
 
 class UtilsGetPosters(unittest.TestCase):
     def setUp(self):
-        self.year = 1933
-        self.dict_imgs_1933 = get_yearly_url_imgs(1933)
+        self.year = 1913
+        self.dict_imgs_1913 = get_yearly_url_imgs(1913)
 
     def test_get_yearly_url_imgs(self):
-        dict_imgs_1933 = self.dict_imgs_1933
+        dict_imgs_1913 = self.dict_imgs_1913
 
         self.assertTrue(isinstance(
-            dict_imgs_1933, list))
+            dict_imgs_1913, list))
 
         self.assertTrue(all(
-            [isinstance(x, dict) for x in dict_imgs_1933]))
+            [isinstance(x, dict) for x in dict_imgs_1913]))
 
         self.assertTrue(all(
-            ['title' in x.keys() for x in dict_imgs_1933]))
+            ['title' in x.keys() for x in dict_imgs_1913]))
 
         self.assertTrue(all(
-            ['url_img' in x.keys() for x in dict_imgs_1933]))
+            ['year' in x.keys() for x in dict_imgs_1913]))
+
+        self.assertTrue(all(
+            ['title_display' in x.keys() for x in dict_imgs_1913]))
+
+        self.assertTrue(all(
+            ['base64_img' in x.keys() for x in dict_imgs_1913]))
+
+        self.assertTrue(all(
+            ['base64_thumb' in x.keys() for x in dict_imgs_1913]))
+
+        self.assertTrue(all(
+            ['url_img' in x.keys() for x in dict_imgs_1913]))
 
     def test_download_poster(self):
-        link = self.dict_imgs_1933[0]
-        year = link['year']
-        config = dict()
-        config['scraping'] = {'folder_images': './tmp/p',
-                              'folder_thumbnails': './tmp/t'}
-        create_folder('./tmp/p/{}'.format(year))
-        create_folder('./tmp/t/{}'.format(year))
-        link_download = download_poster(link, config)
-
-        self.assertTrue(
-            'path_img' in link_download.keys())
-        self.assertTrue(
-            'path_thumb' in link_download.keys())
-
-        self.assertTrue(
-            os.path.exists(link_download['path_img']))
-        self.assertTrue(
-            os.path.exists(link_download['path_thumb']))
-
-        shutil.rmtree('tmp/')
+        link = self.dict_imgs_1913[0]
+        img, thumb = download_poster(link, size_thumb=(50, 50))
+        self.assertTrue(isinstance(img, str))
+        self.assertTrue(isinstance(thumb, str))
 
     def test_get_title_display(self):
         title = 'my movie title'
