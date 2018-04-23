@@ -16,4 +16,4 @@ def main(argv):
     config1 = utils.read_config(args.config1)
     config2 = utils.read_config(args.config2)
 
-    copy_db_dev_prod(config1['uri_db'], config2['uri_db'])
+    copy_db_dev_prod(config1['db_uri'], config2['db_uri'])
