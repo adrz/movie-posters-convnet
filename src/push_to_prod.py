@@ -11,6 +11,8 @@ def copy_db_dev_prod(uri_db_dev, uri_db_prod):
 
     # PosterWeb.__table__.drop(db_prod)
     drop_posterweb(uri_db_prod)
+    db_prod = get_db(uri_db_prod)
+
     data_dev = db_dev.query(Poster.id,
                             Poster.closest_posters,
                             Poster.title_display).all()
