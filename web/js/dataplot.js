@@ -1,7 +1,8 @@
 myData = [];
 map_id_title = {};
 
-url_www = 'http://51.15.248.42/';
+url_www = 'http://128.79.92.46:5000/';
+url_api = 'http://128.79.92.46:5000/v1/';
 
 
 function updatePosters(event){
@@ -13,10 +14,10 @@ function updatePosters(event){
 function updatePage() {
     $('input:first').val(myData[0].title_display);
     console.log(myData[0].url_img);
-    $("#poster-img").attr("src", url_www+'data/posters/'+(myData[0].id-1) + '.jpg');
+    $("#poster-img").attr("src", url_www+'static/posters/'+(myData[0].id) + '.jpg');
     for (var i = 1; i < 7; i++)
     {
-	$("#poster-img"+i).attr("src", url_www+'data/posters/'+(myData[i].id-1)+'.jpg');
+	$("#poster-img"+i).attr("src", url_www+'static/posters/'+(myData[i].id)+'.jpg');
     }
 }
 
@@ -43,7 +44,6 @@ $(document).on({
     ajaxStop: function() { $body.removeClass("loading"); }    
 });
 
-url_api = 'http://51.15.248.42/v1/';
 
 $(document).ready(function() {
     crossDomain: true;
@@ -70,7 +70,6 @@ function retrieve_movie(id) {
         url: url,
 	dataType: "json",
         success: function(data) {
-            //geoData = data;
             myData = data;
         },
         complete: function() {

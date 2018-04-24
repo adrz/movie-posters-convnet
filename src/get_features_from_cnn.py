@@ -28,7 +28,7 @@ def get_features(model, db):
         print('getting features for {} {}/{}'.format(
             poster.path_img, i+1, n_posters))
         # Resize image to be 224x224
-        img = utils.load_img(poster.base64_img,
+        img = image.load_img(poster.path_img,
                              target_size=(img_width, img_height))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)

@@ -6,11 +6,14 @@ COPY requirements.txt /tmp/requirements.txt
 RUN apk add --no-cache \
     python3 \
     python3-dev \
+    py-virtualenv \
+    py-pip \
+    git \
     bash \
     nginx \
     uwsgi \
-    libpcre3 \
-    libpcre3-dev \
+    pcre \
+    pcre-dev \
     uwsgi-python3 \
     supervisor && \
     python3 -m ensurepip && \
