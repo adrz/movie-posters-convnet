@@ -100,16 +100,16 @@ def main(argv):
                   config['scraping']['years_range'][1]+1)
     n_proc = config['scraping']['n_proc']
 
-    print('Retrieve url of posters')
-    with Pool(n_proc) as p:
-        yearly_urls = p.map(get_yearly_url_imgs, years)
-    yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
-
     for year in years:
         utils.create_folder('{}/{}/posters'.format(PATH_IMGS,
                                                    year))
         utils.create_folder('{}/{}/thumbnails'.format(PATH_IMGS,
                                                       year))
+
+    print('Retrieve url of posters')
+    with Pool(n_proc) as p:
+        yearly_urls = p.map(get_yearly_url_imgs, years)
+    yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
 
     # push to db
     session = db_manager.get_db(config['general']['db_uri'])
