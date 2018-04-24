@@ -18,8 +18,7 @@ from PIL import Image
 URL_IMPAWARDS = 'http://www.impawards.com/'
 SESSION = requests.Session()
 
-PATH_IMGS = 'data/posters'
-PATH_THUMBS = 'data/thumbnails'
+PATH_IMGS = 'data'
 
 
 def get_title_display(title, year, url):
@@ -77,9 +76,9 @@ def get_yearly_url_imgs(year):
 
 def download_poster(link, size_thumb=(50, 50)):
     img_bytes = SESSION.get(link, stream=True, verify=False).content
-    file_name = link.split('/')[-1]
+    file_name = '/'.join(link.split('/')[-3:])
     path_img = '{}/{}'.format(PATH_IMGS, file_name)
-    path_thumb = '{}/{}'.format(PATH_THUMBS, file_name)
+    path_thumb = path_img.replace('posters', 'thumbnail')
 
     img_poster = Image.open(io.BytesIO(img_bytes))
     img_poster.save(path_img)
@@ -106,6 +105,11 @@ def main(argv):
         yearly_urls = p.map(get_yearly_url_imgs, years)
     yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
 
+    for year in years:
+        utils.create_folder('{}/{}/posters'.format(PATH_IMGS,
+                                                   year))
+        utils.create_folder('{}/{}/thumbnails'.format(PATH_IMGS,
+                                                      year))
     # push to db
     session = db_manager.get_db(config['general']['db_uri'])
     objects = [db_manager.Poster(x) for x in yearly_urls]
