@@ -13,11 +13,13 @@ import utils
 import db_manager
 import re
 from PIL import Image
-import base64
 
 
 URL_IMPAWARDS = 'http://www.impawards.com/'
 SESSION = requests.Session()
+
+PATH_IMGS = 'data/posters'
+PATH_THUMBS = 'data/thumbnails'
 
 
 def get_title_display(title, year, url):
@@ -55,16 +57,19 @@ def get_yearly_url_imgs(year):
                                       link=x)
                     for x in html_links]
         url_imgs = [x.replace('html', 'jpg') for x in url_imgs]
-        base64_imgs = [download_poster(x) for x in url_imgs]
+        paths = [download_poster(x) for x in url_imgs]
+        path_imgs = [x[0] for x in paths]
+        path_thumbs = [x[1] for x in paths]
+        title_displays = [get_title_display(title, year, x) for x in url_imgs]
         dict_tmp = [{'title': title,
                      'year': year,
-                     'base64_img': y[0],
-                     'base64_thumb': y[1],
-                     'title_display': get_title_display(title,
-                                                        year,
-                                                        x),
+                     'path_img': x,
+                     'path_thumb': y,
+                     'title_display': z,
                      'url_img': x}
-                    for x, y in zip(url_imgs, base64_imgs)]
+                    for x, y, z in zip(title_displays,
+                                       path_imgs,
+                                       path_thumbs)]
         dict_imgs += dict_tmp
 
     return dict_imgs
@@ -72,13 +77,16 @@ def get_yearly_url_imgs(year):
 
 def download_poster(link, size_thumb=(50, 50)):
     img_bytes = SESSION.get(link, stream=True, verify=False).content
+    file_name = link.split('/')[-1]
+    path_img = '{}/{}'.format(PATH_IMGS, file_name)
+    path_thumb = '{}/{}'.format(PATH_THUMBS, file_name)
+
     img_poster = Image.open(io.BytesIO(img_bytes))
-    base64_poster = base64.b64encode(img_bytes).decode('utf-8')
+    img_poster.save(path_img)
+
     img_poster.thumbnail(size_thumb, Image.ANTIALIAS)
-    img_thumb_bytes = io.BytesIO()
-    img_poster.save(img_thumb_bytes, format='JPEG')
-    base64_thumb = base64.b64encode(img_thumb_bytes.getvalue()).decode('utf-8')
-    return base64_poster, base64_thumb
+    img_poster.save(path_thumb)
+    return path_img, path_thumb
 
 
 def main(argv):
