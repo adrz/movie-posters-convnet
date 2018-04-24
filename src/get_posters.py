@@ -110,6 +110,7 @@ def main(argv):
                                                    year))
         utils.create_folder('{}/{}/thumbnails'.format(PATH_IMGS,
                                                       year))
+
     # push to db
     session = db_manager.get_db(config['general']['db_uri'])
     objects = [db_manager.Poster(x) for x in yearly_urls]
