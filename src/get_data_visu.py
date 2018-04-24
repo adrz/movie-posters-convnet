@@ -57,10 +57,11 @@ def get_closest_features(data, db, config):
 
     for d, idxs in zip(data, idx_keep):
         ids = [data[j].id for j in idxs]
-        closest_posters = ','.join(map(str, ids))
-        x = db.query(Poster).filter_by(id=d.id).first()
-        x.closest_posters = closest_posters
-        db.commit()
+        d.closest_posters = ','.join(map(str, ids))
+        # x = db.query(Poster).filter_by(id=d.id).first()
+        # x.closest_posters = closest_posters
+
+    db.commit()
 
     return True
 

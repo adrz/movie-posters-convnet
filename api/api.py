@@ -2,10 +2,12 @@ from src.db_manager import (get_db, Poster, Poster)
 from src.utils import read_config
 from flask_restful import Resource
 from sqlalchemy.orm.attributes import InstrumentedAttribute
+import os
 
 
 class ApiPosters(Resource):
     def __init__(self, path_config='./config/production.conf'):
+        path_config = os.getenv('configapi')
         self.config = read_config(path_config)
         self.db = get_db(self.config['general']['db_uri'])
 

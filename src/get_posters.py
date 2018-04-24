@@ -65,10 +65,11 @@ def get_yearly_url_imgs(year):
                      'path_img': x,
                      'path_thumb': y,
                      'title_display': z,
-                     'url_img': x}
-                    for x, y, z in zip(title_displays,
-                                       path_imgs,
-                                       path_thumbs)]
+                     'url_img': w}
+                    for x, y, z, w in zip(path_imgs,
+                                          path_thumbs,
+                                          title_displays,
+                                          url_imgs)]
         dict_imgs += dict_tmp
 
     return dict_imgs
