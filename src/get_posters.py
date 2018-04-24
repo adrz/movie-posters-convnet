@@ -78,7 +78,7 @@ def download_poster(link, size_thumb=(50, 50)):
     img_bytes = SESSION.get(link, stream=True, verify=False).content
     file_name = '/'.join(link.split('/')[-3:])
     path_img = '{}/{}'.format(PATH_IMGS, file_name)
-    path_thumb = path_img.replace('posters', 'thumbnail')
+    path_thumb = path_img.replace('posters', 'thumbnails')
 
     img_poster = Image.open(io.BytesIO(img_bytes))
     img_poster.save(path_img)
