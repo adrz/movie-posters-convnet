@@ -5,5 +5,5 @@ flask_cors==3.0.3
 Flask==0.12.2
 requests==2.18.4
 psycopg2==2.7.4
-uwsgi=2.0.17
-numpy=1.14.2
+uwsgi==2.0.17
+numpy==1.14.2
