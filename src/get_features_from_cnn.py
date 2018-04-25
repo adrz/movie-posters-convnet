@@ -55,6 +55,7 @@ def main(argv):
                         default="./config/development.conf")
     args = parser.parse_args()
     config = utils.read_config(args.config)
+
     # Load VGG16, guys you better have a GPU...
     model = load_model(config)
     db = db_manager.get_db(config['general']['db_uri'])

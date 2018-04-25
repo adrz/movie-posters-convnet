@@ -14,10 +14,10 @@ function updatePosters(event){
 function updatePage() {
     $('input:first').val(myData[0].title_display);
     console.log(myData[0].url_img);
-    $("#poster-img").attr("src", url_www+'static/posters/'+(myData[0].id) + '.jpg');
+    $("#poster-img").attr("src", url_www+'static/'+(myData[0].path_img));
     for (var i = 1; i < 7; i++)
     {
-	$("#poster-img"+i).attr("src", url_www+'static/posters/'+(myData[i].id)+'.jpg');
+	$("#poster-img"+i).attr("src", url_www+'static/'+(myData[i].path_img));
     }
 }
 
@@ -28,13 +28,17 @@ $( "form" ).submit(function( event ) {
 
 function click_img(num) {
     retrieve_movie(myData[num].id);
-}
+};
 
 document.getElementById('random').onclick = function() {
+    random_movie();
+};
+
+function random_movie() {
     n_movies = Object.keys(map_id_title).length;
     var idx_rnd = Math.floor((Math.random() * n_movies));
     retrieve_movie(idx_rnd);
-}
+};
 
 $body = $("body");
 
