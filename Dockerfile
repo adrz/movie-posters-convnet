@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Copy python requirements file
-COPY requirements-cpu.txt /tmp/requirements.txt
+COPY requirements-api.txt /tmp/requirements.txt
 
 RUN apk add --no-cache \
     python3 \
