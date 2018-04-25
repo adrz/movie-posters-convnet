@@ -2,6 +2,8 @@ FROM alpine:latest
 
 # Copy python requirements file
 COPY requirements-api.txt /tmp/requirements.txt
+# Add demo app
+COPY ./ /app
 
 RUN apk add --no-cache \
     python3 \
@@ -23,9 +25,6 @@ RUN apk add --no-cache \
     linux-headers \
     supervisor && \
     python3 -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip3 install --upgrade pip setuptools && \
-    pip3 install -r /tmp/requirements.txt && \
     rm /etc/nginx/conf.d/default.conf && \
     rm -r /root/.cache && \
     rm -rf /etc/nginx/sites-available/default && \
@@ -39,8 +38,12 @@ COPY uwsgi.ini /etc/uwsgi/
 # Custom Supervisord config
 COPY supervisord.conf /etc/supervisord.conf
 
-# Add demo app
-COPY ./ /app
 WORKDIR /app
+RUN rm -r /usr/lib/python*/ensurepip && \
+    rm -rf env && \
+    virtualenv -p python3 env && \
+    source env/bin/activate && \
+    pip install -r /tmp/requirements.txt && \
+
 
 CMD ["/usr/bin/supervisord"]
