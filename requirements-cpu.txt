@@ -1,0 +1,16 @@
+bs4==0.0.1
+pytest==3.5.0
+configparser==3.5.0
+pytest-cov==2.5.1
+sqlalchemy==1.2.6
+lxml==4.2.1
+tensorflow==1.7.0
+keras==2.1.5
+h5py==2.7.1
+pillow==5.1.0
+Flask_RESTful==0.3.6
+scikit_learn==0.19.1
+flask_cors==3.0.3
+Flask==0.12.2
+requests==2.18.4
+psycopg2==2.7.4

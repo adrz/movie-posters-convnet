@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Copy python requirements file
-COPY requirements.txt /tmp/requirements.txt
+COPY requirements-cpu.txt /tmp/requirements.txt
 
 RUN apk add --no-cache \
     python3 \
@@ -11,6 +11,9 @@ RUN apk add --no-cache \
     git \
     bash \
     nginx \
+    postgresql-libs \
+    postgresql-dev \
+    musl-dev \
     uwsgi \
     pcre \
     pcre-dev \
