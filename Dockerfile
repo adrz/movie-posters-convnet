@@ -26,7 +26,6 @@ RUN apk add --no-cache \
     supervisor && \
     python3 -m ensurepip && \
     rm /etc/nginx/conf.d/default.conf && \
-    rm -r /root/.cache && \
     rm -rf /etc/nginx/sites-available/default && \
     rm -rf /etc/nginx/sites-available/default
 
