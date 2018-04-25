@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine
 
 # Copy python requirements file
 COPY requirements-api.txt /tmp/requirements.txt
@@ -16,7 +16,6 @@ RUN apk add --no-cache \
     postgresql-libs \
     postgresql-dev \
     musl-dev \
-    uwsgi \
     pcre \
     pcre-dev \
     uwsgi-python3 \
