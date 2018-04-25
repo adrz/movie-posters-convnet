@@ -28,7 +28,7 @@ RUN apk add --no-cache \
     pip3 install -r /tmp/requirements.txt && \
     rm /etc/nginx/conf.d/default.conf && \
     rm -r /root/.cache && \
-    rm -rf /etc/nginx/sites-available/default && \\
+    rm -rf /etc/nginx/sites-available/default && \
     rm -rf /etc/nginx/sites-available/default
 
 
