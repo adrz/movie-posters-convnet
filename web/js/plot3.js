@@ -20,27 +20,6 @@ function plot(json, size){
     var img5 = d3.select("#poster-img5");
     var img6 = d3.select("#poster-img6");
     
-    // var img = d3.select('div.w3-third')
-    //     .append("img")
-    //     .attr('id', 'current_img')
-    //     .attr('height', (w/2-10)*2/3);
-
-    // var img1 = d3.select('div.img1')
-    //     .append("img")
-    //     .attr('id', 'current_img')
-    //     .attr('height', (w/2-10)*2/3);
-
-    // var img2 = d3.select('div.img2')
-    //     .append("img")
-    //     .attr('id', 'current_img')
-    //     .attr('height', (w/2-10)*2/3);
-
-    // var img3 = d3.select('div.img3')
-    //     .append("img")
-    //     .attr('id', 'current_img')
-    //     .attr('height', (w/2-10)*2/3);
-
-
     var score1 = d3.select("#score1");
     var score2 = d3.select("#score2");
     var score3 = d3.select("#score3");
@@ -63,9 +42,6 @@ function plot(json, size){
             img4.attr('src', d[7]);
             img5.attr('src', d[8]);
             img6.attr('src', d[9]);
-    	    // score1.html("1st closest poster: "+d[7]);
-    	    // score2.html("2nd closest poster: "+d[8]);
-    	    // score3.html("3rd closest poster: "+d[9]);
         });
 
     
