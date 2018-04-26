@@ -6,8 +6,8 @@ After=network.target
 User=www-data
 Group=www-data
 WorkingDirectory=/app/movie-posters-convnet
-Environment="PATH=/app/movie-posters-convnet/env/bin"
-Environment="configapi=/app/config/development_model11.conf"
+Environment=PATH=/app/movie-posters-convnet/env/bin
+Environment=configapi=/app/config/development_model11.conf
 ExecStart=/app/movie-posters-convnet/env/bin/uwsgi --ini uwsgi.ini
 
 [Install]
