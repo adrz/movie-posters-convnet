@@ -66,6 +66,12 @@ function updatePage() {
     }
 };
 
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+    ajaxStop: function() { $body.removeClass("loading"); }    
+});
 
 function retrieve_movie(id) {
     url = url_api + id.toString();
@@ -93,21 +99,6 @@ function get_size(){
     return [40, 40];
 }
 
-// var jsonvar = []
-
-// d3.json(get_dataset(), function(error, json) {
-//     if (error) return console.warn(error);
-//     jsonvar = json;
-//     plot(json, get_size());
-// });
-
-
-myData = [];
-dataClicked = [];
-map_id_title = {};
-
-url_www = 'http://128.79.92.46:5000/';
-url_api = 'http://128.79.92.46:5000/v1/';
 
 function getRandomSubarray(arr, size) {
     var shuffled = arr.slice(0), i = arr.length, temp, index;

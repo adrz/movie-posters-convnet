@@ -1,9 +1,3 @@
-myData = [];
-map_id_title = {};
-
-url_www = 'http://128.79.92.46:5000/';
-url_api = 'http://128.79.92.46:5000/v1/';
-
 
 function updatePosters(event){
     var title = $('input:first').val();
