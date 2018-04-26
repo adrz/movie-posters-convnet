@@ -28,7 +28,7 @@ class ApiPosters(Resource):
                     x in self.db.query(Poster.id,
                                        Poster.title_display).all()}
         elif id == '2d':
-            data = [{'id': x[0], 'xy': x[1], 'thumb': x[2]}
+            data = [{'id': x[0], 'xy': list(x[1]), 'thumb': x[2]}
                     for x in self.db.query(Poster.id,
                                            Poster.features_pca,
                                            Poster.path_thumb).all()]
