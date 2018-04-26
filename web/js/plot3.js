@@ -10,7 +10,7 @@ function plot(json, size){
 
     var svg = d3.select("#tsne")
 	.append("svg")
-	.attr("viewBox", "0 0 1024 768");
+	.attr("viewBox", "0 0 1024 500");
 
     var img = d3.select("#poster-img");
     var img1 = d3.select("#poster-img1");
@@ -19,29 +19,18 @@ function plot(json, size){
     var img4 = d3.select("#poster-img4");
     var img5 = d3.select("#poster-img5");
     var img6 = d3.select("#poster-img6");
-    
-    var score1 = d3.select("#score1");
-    var score2 = d3.select("#score2");
-    var score3 = d3.select("#score3");
 
     svg.append('g').selectAll('.myPoint')
         .data(json)
         .enter()
         .append('image')
-        .attr("xlink:href", function(d){ return d[2] })
-        .attr("x", function(d){ return d[0]})
-        .attr("y", function(d){ return d[1]})
+        .attr("xlink:href", function(d){ return url_www+'static/'+(d.thumb) })
+        .attr("x", function(d){ return d.xy[0]})
+        .attr("y", function(d){ return d.xy[1]})
         .attr("width", size[0])
         .attr("height", size[1])
         .on("click", function(d, i){
-	    console.log(d[3]);
-            img.attr('src', d[3]);
-            img1.attr('src', d[4]);
-            img2.attr('src', d[5]);
-            img3.attr('src', d[6]);
-            img4.attr('src', d[7]);
-            img5.attr('src', d[8]);
-            img6.attr('src', d[9]);
+	    retrieve_movie(d.id);
         });
 
     
@@ -60,31 +49,91 @@ function plot(json, size){
 	    .attr('width', w)
 	    .attr('height',h);
     });
-}
+};
+
+function click_img(num) {
+    retrieve_movie(dataClicked[num].id);
+};
+
+
+function updatePage() {
+    $('input:first').val(dataClicked[0].title_display);
+    console.log(myData[0].url_img);
+    $("#poster-img").attr("src", url_www+'static/'+(dataClicked[0].path_img));
+    for (var i = 1; i < 7; i++)
+    {
+	$("#poster-img"+i).attr("src", url_www+'static/'+(dataClicked[i].path_img));
+    }
+};
+
+
+function retrieve_movie(id) {
+    url = url_api + id.toString();
+    $.ajax({
+        type:"get",
+        url: url,
+	dataType: "json",
+        success: function(data) {
+            dataClicked = data;
+        },
+        complete: function() {
+	    updatePage();
+        }
+    });
+};
+
 
 function updateWindow(){
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 }
 window.onresize = updateWindow;
 
-function get_dataset(){
-    var dataset = window.location.search.substr(1);
-    if (dataset) {
-       return "datasets/" + dataset + ".json";
-    } else {
-        return "datasets/x.json";
-    }
-}
-
 function get_size(){
     var dataset = window.location.search.substr(1);
     return [40, 40];
 }
 
-var jsonvar = []
+// var jsonvar = []
 
-d3.json(get_dataset(), function(error, json) {
-    if (error) return console.warn(error);
-    jsonvar = json;
-    plot(json, get_size());
+// d3.json(get_dataset(), function(error, json) {
+//     if (error) return console.warn(error);
+//     jsonvar = json;
+//     plot(json, get_size());
+// });
+
+
+myData = [];
+dataClicked = [];
+map_id_title = {};
+
+url_www = 'http://128.79.92.46:5000/';
+url_api = 'http://128.79.92.46:5000/v1/';
+
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+}
+
+$(document).ready(function() {
+    crossDomain: true;
+    $.ajax({
+        type:"get",
+        url: url_api + '2d',
+	dataType: "json",
+        success: function(data) {
+	    console.log('success madafaka');
+	    myData = data;
+	    // plot(myData, [40, 40]);
+	},
+        complete: function() {
+            //setTimeout(loadData, 1000);
+        }
+    });
+
 });
