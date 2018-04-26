@@ -62,8 +62,19 @@ def get_closest_features(data, db, config):
         # x.closest_posters = closest_posters
 
     db.commit()
-
     return True
+
+
+def get_2D_features(data, db, config):
+    import umap
+    features = np.array([x.features for x in data])
+    embedding = umap.UMAP(n_neighbors=20,
+                          min_dist=0.3,
+                          metric='cosine').fit_transform(features)
+    embedding = np.array(scale_coords(embedding))
+    for d, f in zip(data, embedding):
+        d.features_pca = f
+    db.commit()
 
 # def process_features_tsne(df, n_samples=2000,
 #                           perplexity=40, n_jobs=2,

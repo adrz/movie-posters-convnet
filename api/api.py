@@ -27,6 +27,10 @@ class ApiPosters(Resource):
             data = {x[1]: x[0] for
                     x in self.db.query(Poster.id,
                                        Poster.title_display).all()}
+        elif id == '2d':
+            data = {x[0]: x[1] for
+                    x in self.db.query(Poster.id,
+                                       Poster.features_pca).all()}
         else:
             id = int(id)
             print('movie id: {}'.format(id))
