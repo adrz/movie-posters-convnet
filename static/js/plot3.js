@@ -37,10 +37,11 @@ function plot(json, size){
         });
 
     
-    var zoom = d3.zoom().scaleExtent([0.2, 10])
+    var zoom = d3.zoom()
+	.scale(.2)
+	.scaleExtent([0.2, 10])
 	.translateExtent([[-100, -100], [2000, 2000]]);
-    svg.call(zoom)
-	.call(zoom.transform, d3.zoomIdentity.scale(.2,.2));
+    svg.call(zoom);
     zoom.on("zoom", function(){
 	var transform = d3.event.transform;
 	var w = size[0] / Math.sqrt(transform.k);
