@@ -7,10 +7,11 @@
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, .8 ) 
-                url('http://i.stack.imgur.com/FhHRx.gif') 
+                url('https://media.giphy.com/media/jWexOOlYe241y/giphy.gif') 
                 50% 50% 
                 no-repeat;
 }
+/*http://i.stack.imgur.com/FhHRx.gif*/
 
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
