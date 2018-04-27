@@ -48,6 +48,9 @@ function plot(json, size){
 	var transform = d3.event.transform;
 	var w = size[0] / Math.sqrt(transform.k);
 	var h = size[1] / Math.sqrt(transform.k);
+	console.log(transform.x);
+	console.log(transform.y);
+	console.log(transform);
 	var transform = "translate(" + transform.x + "," +
 	    transform.y + ") scale(" + transform.k + ")";
 	svg.selectAll('image')
