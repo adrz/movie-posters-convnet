@@ -80,8 +80,11 @@ class index_complete(Resource):
         return make_response(render_template('index_complete.html'), 200, headers)
 
 
-api.add_resource(index, '/')
-api.add_resource(index, '/index.html')
+routes = [
+    '/',
+    '/index/html',
+]
+api.add_resource(index, *routes)
 api.add_resource(index_complete, '/index_complete.html')
 api.add_resource(ApiPosters, '/v1/<id>')
 appli.register_blueprint(api_bp)
