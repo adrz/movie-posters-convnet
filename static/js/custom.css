@@ -2,13 +2,13 @@
     display:    none;
     position:   fixed;
     z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
+    top:        500;
+    left:       500;
+    height:     20%;
+    width:      20%;
     background: rgba( 255, 255, 255, .8 ) 
                 url('https://media.giphy.com/media/jWexOOlYe241y/giphy.gif') 
-                10% 10% 
+                50% 50% 
                 no-repeat;
 }
 /*http://i.stack.imgur.com/FhHRx.gif*/
