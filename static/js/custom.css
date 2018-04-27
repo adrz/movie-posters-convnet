@@ -3,9 +3,9 @@
     position:   fixed;
     z-index:    1000;
     top:        0;
-    left:       100;
-    height:     100%;
-    width:      100%;
+    left:       20;
+    height:     50%;
+    width:      50%;
     background: rgba( 255, 255, 255, .8 ) 
                 url('https://media.giphy.com/media/jWexOOlYe241y/giphy.gif') 
                 50% 50% 
