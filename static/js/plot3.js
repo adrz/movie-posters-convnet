@@ -3,6 +3,9 @@
 var scale_x = d3.scaleLinear().domain([0, 1024]).range([0, 1024*2]);
 var scale_y = d3.scaleLinear().domain([0, 500]).range([0, 1024*2]);
 
+var svg;
+var zoom;
+
 function plot(json, size){
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
@@ -11,7 +14,7 @@ function plot(json, size){
     //     .attr("width", w/2-10)
     //     .attr("height", (w/2-10)*2/3);
 
-    var svg = d3.select("#tsne")
+    svg = d3.select("#tsne")
 	.append("svg")
 	.attr("viewBox", "0 0 1024 500");
 
@@ -37,7 +40,7 @@ function plot(json, size){
         });
 
     
-    var zoom = d3.zoom()
+    zoom = d3.zoom()
 	.scaleExtent([0.2, 10])
 	.translateExtent([[-100, -100], [2000, 2000]]);
     svg.call(zoom);
