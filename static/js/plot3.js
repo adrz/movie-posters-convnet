@@ -59,8 +59,8 @@ function plot(json, size){
 	    .attr('height',h);
     });
 
-    zoom.scaleTo(svg, .2);
     zoom.translateBy(svg, 350, 74);
+    zoom.scaleTo(svg, .2);
 };
 
 function click_img(num) {
