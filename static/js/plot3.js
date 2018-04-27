@@ -1,7 +1,7 @@
 // https://github.com/douglasbagnall/image-tsne
 
-var scale_x = d3.scaleLinear().domain([0, 800]).range([0, 1024*2]);
-var scale_y = d3.scaleLinear().domain([0, 800]).range([0, 500*2]);
+var scale_x = d3.scaleLinear().domain([0, 1024]).range([0, 1024*2]);
+var scale_y = d3.scaleLinear().domain([0, 500]).range([0, 1024*2]);
 
 function plot(json, size){
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -37,8 +37,8 @@ function plot(json, size){
         });
 
     
-    var zoom = d3.zoom().scaleExtent([0.5, 10])
-	.translateExtent([[-100, -100], [1500, 1500]]);
+    var zoom = d3.zoom().scaleExtent([0.2, 10])
+	.translateExtent([[-100, -100], [2000, 2000]]);
     svg.call(zoom);
     zoom.on("zoom", function(){
 	
