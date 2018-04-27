@@ -11,8 +11,8 @@
 	  href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" />
     <link rel="stylesheet"
 	  href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css" />
-    <link rel="stylesheet" href="js/custom.css" />    
-    <link rel="stylesheet" href="js/milligram.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/custom.css') }}" />    
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/milligram.css') }}" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   </head>
   <body>
@@ -149,6 +149,6 @@
     </div>
     <div class="modal"></div>
   </body>
-  <script type="text/javascript" src="js/vars.js"></script>
-  <script type="text/javascript" src="js/plot3.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vars.js') }}"</script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/plot3.js') }}"</script>
 </html>
