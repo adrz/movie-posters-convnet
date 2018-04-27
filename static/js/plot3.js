@@ -37,8 +37,7 @@ function plot(json, size){
         });
 
     
-    var zoom = d3.zoom()
-	.scale(.2)
+    var zoom = d3.behavior.zoom()
 	.scaleExtent([0.2, 10])
 	.translateExtent([[-100, -100], [2000, 2000]]);
     svg.call(zoom);
