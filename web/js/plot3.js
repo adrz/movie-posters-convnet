@@ -1,5 +1,8 @@
 // https://github.com/douglasbagnall/image-tsne
 
+var scale_x = d3.scaleLinear().domain([0, 800]).range([0, 1024*2]);
+var scale_y = d3.scaleLinear().domain([0, 800]).range([0, 500*2]);
+
 function plot(json, size){
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
@@ -25,8 +28,8 @@ function plot(json, size){
         .enter()
         .append('image')
         .attr("xlink:href", function(d){ return url_www+'static/'+(d.thumb) })
-        .attr("x", function(d){ return d.xy[0]})
-        .attr("y", function(d){ return d.xy[1]})
+        .attr("x", function(d){ return scale_x(d.xy[0])})
+        .attr("y", function(d){ return scale_y(d.xy[1])})
         .attr("width", size[0])
         .attr("height", size[1])
         .on("click", function(d, i){
@@ -40,8 +43,8 @@ function plot(json, size){
     zoom.on("zoom", function(){
 	
 	var transform = d3.event.transform;
-	var w = size[0] / transform.k;
-	var h = size[1] / transform.k;
+	var w = size[0] / Math.sqrt(transform.k);
+	var h = size[1] / Math.sqrt(transform.k);
 	var transform = "translate(" + transform.x + "," +
 	    transform.y + ") scale(" + transform.k + ")";
 	svg.selectAll('image')
@@ -66,12 +69,6 @@ function updatePage() {
     }
 };
 
-$body = $("body");
-
-$(document).on({
-    ajaxStart: function() { $body.addClass("loading");    },
-    ajaxStop: function() { $body.removeClass("loading"); }    
-});
 
 function retrieve_movie(id) {
     url = url_api + id.toString();
@@ -127,4 +124,13 @@ $(document).ready(function() {
         }
     });
 
+});
+
+
+
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+    ajaxStop: function() { $body.removeClass("loading"); }    
 });

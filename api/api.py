@@ -28,10 +28,13 @@ class ApiPosters(Resource):
                     x in self.db.query(Poster.id,
                                        Poster.title_display).all()}
         elif id == '2d':
+            fields = (Poster.id,
+                      Poster.features_pca,
+                      Poster.path_thumb)
             data = [{'id': x[0], 'xy': list(x[1]), 'thumb': x[2]}
-                    for x in self.db.query(Poster.id,
-                                           Poster.features_pca,
-                                           Poster.path_thumb).all()]
+                    for x in self.db
+                    .query(*fields)
+                    .filter(~Poster.path_img.contains('ver')).all()]
         else:
             id = int(id)
             print('movie id: {}'.format(id))
