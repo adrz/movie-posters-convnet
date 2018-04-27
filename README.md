@@ -53,7 +53,7 @@ $ git clone https://github.com/aDrz/movie-posters-convnet.git
 
 # Usage
 
-## Computation
+w## Computation
 After cloning you can just launch the bash script that will:
 * download posters from 1920 to 2016
 * compute features

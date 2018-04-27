@@ -68,10 +68,10 @@ def get_closest_features(data, db, config):
 def get_2D_features(data, db, config):
     import umap
     features = np.array([x.features for x in data])
-    embedding = umap.UMAP(n_neighbors=20,
+    embedding = umap.UMAP(n_neighbors=30,
                           min_dist=0.3,
                           metric='cosine').fit_transform(features)
-    embedding = np.array(scale_coords(embedding))
+    embedding = np.array(scale_coords(embedding, width=1024, height=500))
     for d, f in zip(data, embedding):
         d.features_pca = f
     db.commit()

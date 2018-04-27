@@ -75,7 +75,7 @@ def get_yearly_url_imgs(year):
     return dict_imgs
 
 
-def download_poster(link, size_thumb=(50, 50)):
+def download_poster(link, size_thumb=(100, 100)):
     img_bytes = SESSION.get(link, stream=True, verify=False).content
     file_name = '/'.join(link.split('/')[-3:])
     path_img = '{}/{}'.format(PATH_IMGS, file_name)
@@ -88,6 +88,15 @@ def download_poster(link, size_thumb=(50, 50)):
     img_poster.save(path_thumb)
     return path_img, path_thumb
 
+# def resize_img(data, size_img, size_thumb):
+#     for x in data:
+#         path_img = x.path_img
+#         path_thumb = x.path_thumb
+#         img = Image.open(path_img)
+#         img.thumbnail(size_img, Image.ANTIALIAS)
+#         img.save(path_img)
+#         img.thumbnail(size_thumb, Image.ANTIALIAS)
+#         img.save(path_thumb)
 
 def main(argv):
     parser = argparse.ArgumentParser()

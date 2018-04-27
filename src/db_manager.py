@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.schema import Column
-from sqlalchemy.types import Integer, String, TypeDecorator
+from sqlalchemy.types import Integer, String, BINARY, TypeDecorator
 import sqlite3
 import io
 from sqlalchemy.ext.declarative import declarative_base
