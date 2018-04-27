@@ -37,7 +37,7 @@ function plot(json, size){
         });
 
     
-    var zoom = d3.behavior.zoom()
+    var zoom = d3.zoom()
 	.scaleExtent([0.2, 10])
 	.translateExtent([[-100, -100], [2000, 2000]]);
     svg.call(zoom);
@@ -52,6 +52,7 @@ function plot(json, size){
 	    .attr('width', w)
 	    .attr('height',h);
     });
+    zoom.scaleTo(svg, .2);
 };
 
 function click_img(num) {
