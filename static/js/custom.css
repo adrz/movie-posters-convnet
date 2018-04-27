@@ -7,8 +7,8 @@
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, .8 ) 
-                url('https://i.imgur.com/0kvtMLE.gif') 
-                5% 5% 
+                url('/static/loading.gif') 
+                50% 50% 
                 no-repeat;
 }
 /*http://i.stack.imgur.com/FhHRx.gif*/
