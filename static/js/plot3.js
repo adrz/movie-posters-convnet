@@ -117,7 +117,8 @@ $(document).ready(function() {
         success: function(data) {
 	    console.log('success madafaka');
 	    myData = data;
-	    // plot(myData, [40, 40]);
+	    subset = getRandomSubarray(data, 2000);
+	    plot(subset, [40, 40]);
 	},
         complete: function() {
             //setTimeout(loadData, 1000);
