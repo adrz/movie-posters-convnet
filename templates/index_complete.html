@@ -14,9 +14,13 @@
     <link rel="stylesheet"
 	  href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css" />
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript"
+	    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/auto-complete.min.css') }}"></script>
+      
     <link rel="stylesheet" href="{{ url_for('static', filename='js/custom.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='js/milligram.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/auto-complete.css') }}" />
   </head>
   <body>
 
@@ -26,7 +30,7 @@
       </div>
       <div class="row">
 	<form class="clearfix" action="return false;">
-	  <input type="text" autocomplete="on" aria-autocomplete="list", value="",
+	  <input type="text" autocomplete="on" aria-autocomplete="list", value="" name="q",
 		 size="60%" />
 	  <input type="submit" />
 	  <input class="button button-clear" id="random" type="submit" value="random" />

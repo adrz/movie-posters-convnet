@@ -38,7 +38,7 @@ $body = $("body");
 
 
 $(document).on({
-    ajaxStart: function() { $body.addClass("loading");    },
+    ajaxStart: function() { $body.addClass("loading");  },
     ajaxStop: function() { $body.removeClass("loading"); }    
 });
 
@@ -52,6 +52,18 @@ $(document).ready(function() {
         success: function(data) {
             //geoData = data;
             map_id_title = data;
+	    new autoComplete({
+		selector: 'input[name="q"]',
+		minChars: 2,
+		source: function(term, suggest){
+		    term = term.toLowerCase();
+		    var choices = Object.keys(map_id_title);
+		    var matches = [];
+		    for (i=0; i<choices.length; i++)
+			if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
+		    a        suggest(matches);
+		}
+	    });
 	},
         complete: function() {
             //setTimeout(loadData, 1000);
