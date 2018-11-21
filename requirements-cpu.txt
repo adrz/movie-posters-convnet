@@ -11,7 +11,7 @@ pillow==5.1.0
 Flask_RESTful==0.3.6
 scikit_learn==0.19.1
 flask_cors==3.0.3
-Flask==0.12.2
-requests==2.18.4
+Flask>=0.12.3
+requests>=2.20.0
 psycopg2==2.7.4
 numpy==1.14.2

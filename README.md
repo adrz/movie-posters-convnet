@@ -141,8 +141,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 
 ## Server install
-ssh root@51.15.248.42
-# ssh adrien@35.196.172.250
 
 sudo apt update
 sudo apt upgrade -y
