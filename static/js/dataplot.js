@@ -58,6 +58,7 @@ $(document).ready(function() {
         }
     });
     retrieve_movie(2222);
+
     new autoComplete({
 	selector: 'input[name="q"]',
 	minChars: 1,
