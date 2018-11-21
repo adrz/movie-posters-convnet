@@ -29,9 +29,7 @@ class DbManagerTest(unittest.TestCase):
                        'features': np.array([1, 2, 3]),
                        'features_pca': np.array([1, 2]),
                        'closest_posters': '',
-                       'title_display': 'dfs',
-                       'base64_img': 'b343',
-                       'base64_thumb': 'b13434'}
+                       'title_display': 'dfs'}
         poster_b = Poster(dict_poster)
 
         dict_poster_b = poster_b.__dict__
@@ -40,14 +38,15 @@ class DbManagerTest(unittest.TestCase):
         self.assertTrue(dict_poster_b == dict_poster)
 
     def test_PosterWeb(self):
-        poster_b = PosterWeb(1, 'blabla', 'blablabla')
+        poster_b = PosterWeb(1, 'blabla', 'blablabla', 'dumdum')
 
         self.assertTrue(isinstance(
             poster_b, Base))
 
         dict_poster = {'id': 1,
                        'closest_posters': 'blabla',
-                       'title_display': 'blablabla'}
+                       'title_display': 'blablabla',
+                       'path_img': 'dumdum'}
         dict_poster_b = poster_b.__dict__
         del(dict_poster_b['_sa_instance_state'])
         self.assertTrue(dict_poster_b == dict_poster)

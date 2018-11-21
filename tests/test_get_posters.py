@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 
+
 import sys
+sys.path.append('src')
 import unittest
 
 from src.get_posters import (download_poster, get_title_display,
                              get_yearly_url_imgs)
-
-sys.path.append('src')
+from src.utils import create_folder
 
 
 class UtilsGetPosters(unittest.TestCase):
     def setUp(self):
         self.year = 1913
+        create_folder('./data/{}/posters'.format(self.year))
+        create_folder('./data/{}/thumbnails'.format(self.year))
         self.dict_imgs_1913 = get_yearly_url_imgs(1913)
 
     def test_get_yearly_url_imgs(self):
@@ -32,11 +35,11 @@ class UtilsGetPosters(unittest.TestCase):
         self.assertTrue(all(
             ['title_display' in x.keys() for x in dict_imgs_1913]))
 
-        self.assertTrue(all(
-            ['base64_img' in x.keys() for x in dict_imgs_1913]))
+        # self.assertTrue(all(
+        #     ['base64_img' in x.keys() for x in dict_imgs_1913]))
 
-        self.assertTrue(all(
-            ['base64_thumb' in x.keys() for x in dict_imgs_1913]))
+        # self.assertTrue(all(
+        #     ['base64_thumb' in x.keys() for x in dict_imgs_1913]))
 
         self.assertTrue(all(
             ['url_img' in x.keys() for x in dict_imgs_1913]))
