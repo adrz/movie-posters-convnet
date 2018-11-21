@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
-import io
-from bs4 import BeautifulSoup
-from urllib import request
-import requests
 import argparse
-from multiprocessing import Pool
+import io
 import itertools
-import utils
-import db_manager
 import re
+import sys
+from multiprocessing import Pool
+from urllib import request
+
+import requests
+from bs4 import BeautifulSoup
 from PIL import Image
 
+import db_manager
+import utils
 
 URL_IMPAWARDS = 'http://www.impawards.com/'
 SESSION = requests.Session()
@@ -21,7 +22,20 @@ SESSION = requests.Session()
 PATH_IMGS = 'data'
 
 
-def get_title_display(title, year, url):
+def get_title_display(title: str, year: int, url: str) -> str:
+    """
+    Extract simplified title.
+
+    Parameters
+    ----------
+    title (str): movie title
+    year (int): date of the movie
+    url (str): url of the movie poster
+
+    Returns
+    ----------
+    title_display (str): format "title, year, version"
+    """
     version = re.search('_ver([0-9]{2,3}|[2-9])', url)
     if version:
         title_display = '{}, {}, v{}'.format(
@@ -33,9 +47,18 @@ def get_title_display(title, year, url):
     return title_display
 
 
-def get_yearly_url_imgs(year):
-    """ Retrieve all the posters' urls along with the title
+def get_yearly_url_imgs(year: int) -> list:
+    """
+    Retrieve all the posters' urls along with the title
     from impawards for specific year
+
+    Parameters
+    ----------
+    year (int): date format %Y (eg 1990)
+
+    Returns
+    ----------
+    dict_imgs (list): list of dictionary containing information related to the movies.
     """
     url = '{}{}/std.html'.format(URL_IMPAWARDS,
                                  year)
@@ -75,7 +98,20 @@ def get_yearly_url_imgs(year):
     return dict_imgs
 
 
-def download_poster(link, size_thumb=(100, 100)):
+def download_poster(link: str, size_thumb: tuple=(100, 100)) -> tuple:
+    """
+    Download the poster and create a thumbnail
+
+    Parameters
+    ----------
+    link (str): url of the poster
+    size_thumb (tuple): dimension of the thumbnail
+
+    Returns
+    ----------
+    path_img (str): local path of the downloaded poster
+    path_thumb (str): local path of the thumbnail
+    """
     img_bytes = SESSION.get(link, stream=True, verify=False).content
     file_name = '/'.join(link.split('/')[-3:])
     path_img = '{}/{}'.format(PATH_IMGS, file_name)
@@ -88,17 +124,9 @@ def download_poster(link, size_thumb=(100, 100)):
     img_poster.save(path_thumb)
     return path_img, path_thumb
 
-# def resize_img(data, size_img, size_thumb):
-#     for x in data:
-#         path_img = x.path_img
-#         path_thumb = x.path_thumb
-#         img = Image.open(path_img)
-#         img.thumbnail(size_img, Image.ANTIALIAS)
-#         img.save(path_img)
-#         img.thumbnail(size_thumb, Image.ANTIALIAS)
-#         img.save(path_thumb)
 
 def main(argv):
+    # arguments parsing
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config',
                         help="config file (default: config/development.conf",
@@ -110,12 +138,14 @@ def main(argv):
                   config['scraping']['years_range'][1]+1)
     n_proc = config['scraping']['n_proc']
 
+    # create the folders in which the poster will be downloaded
     for year in years:
         utils.create_folder('{}/{}/posters'.format(PATH_IMGS,
                                                    year))
         utils.create_folder('{}/{}/thumbnails'.format(PATH_IMGS,
                                                       year))
 
+    # Downloading the posters with multiprocessing (highly speed up compare to single process)
     print('Retrieve url of posters')
     with Pool(n_proc) as p:
         yearly_urls = p.map(get_yearly_url_imgs, years)
@@ -124,7 +154,6 @@ def main(argv):
     # push to db
     session = db_manager.get_db(config['general']['db_uri'])
     objects = [db_manager.Poster(x) for x in yearly_urls]
-
     session.bulk_save_objects(objects)
     session.commit()
 

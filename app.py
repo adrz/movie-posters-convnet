@@ -12,7 +12,7 @@ appli = Flask(__name__)
 CORS(appli)
 cache = Cache(appli, config={'CACHE_TYPE': 'redis',
                              'CACHE_REDIS_HOST': '127.0.0.1',
-                             'CACHE_REDIS_PORT':6379})
+                             'CACHE_REDIS_PORT': 6379})
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
@@ -77,13 +77,11 @@ class index_complete(Resource):
     """ print documentation """
     def get(self):
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('index_complete.html'), 200, headers)
+        return make_response(render_template('index_complete.html'),
+                             200, headers)
 
 
-routes = [
-    '/',
-    '/index/html',
-]
+routes = ['/', '/index.html']
 api.add_resource(index, *routes)
 api.add_resource(index_complete, '/index_complete.html')
 api.add_resource(ApiPosters, '/v1/<id>')

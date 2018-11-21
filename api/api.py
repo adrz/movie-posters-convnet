@@ -1,4 +1,6 @@
-from src.db_manager import (get_db, Poster, Poster)
+# -*- coding: utf-8 -*-
+
+from src.db_manager import (get_db, Poster)
 from src.utils import read_config
 from flask_restful import Resource
 from sqlalchemy.orm.attributes import InstrumentedAttribute

@@ -1,7 +1,10 @@
-from push_to_prod import copy_db_dev_prod
-import utils as utils
+# -*- coding: utf-8 -*-
+
 import argparse
 import sys
+
+import utils as utils
+from push_to_prod import copy_db_dev_prod
 
 
 def main(argv):

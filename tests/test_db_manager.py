@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+
 import unittest
-from src.db_manager import (Base, ARRAY, Poster, PosterWeb,
-                            get_db)
+
 import numpy as np
-from sqlalchemy.types import TypeDecorator
 from sqlalchemy.orm.session import Session
+from sqlalchemy.types import TypeDecorator
+
+from src.db_manager import ARRAY, Base, Poster, PosterWeb, get_db
 
 
 class DbManagerTest(unittest.TestCase):

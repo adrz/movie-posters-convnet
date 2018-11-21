@@ -1,12 +1,14 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.schema import Column
-from sqlalchemy.types import Integer, String, BINARY, TypeDecorator
-import sqlite3
+# -*- coding: utf-8 -*-
+
 import io
-from sqlalchemy.ext.declarative import declarative_base
+import sqlite3
 
 import numpy as np
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.schema import Column
+from sqlalchemy.types import BINARY, Integer, String, TypeDecorator
 
 Base = declarative_base()
 

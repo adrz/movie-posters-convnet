@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import argparse
-import numpy as np
+import sys
 from functools import reduce
 from operator import mul
 
-from keras.preprocessing import image
-from keras.applications.imagenet_utils import preprocess_input
-from keras.applications.vgg16 import VGG16
-from keras.applications.resnet50 import ResNet50
+import numpy as np
 
-import utils
 import db_manager
-
+import utils
+from keras.applications.imagenet_utils import preprocess_input
+from keras.applications.resnet50 import ResNet50
+from keras.applications.vgg16 import VGG16
+from keras.preprocessing import image
 
 img_width = 224
 img_height = 224
@@ -22,6 +21,14 @@ img_height = 224
 
 # Feature extractor
 def get_features(model, db):
+    """ Extract the last layer of a ConvNet and push it to a database.
+    The last layer (classification layer) is removed, and the output of the following
+    ConvNet now return a set of features. This technique is often referred as ``transfert learning''.
+
+    Parameters
+    ----------
+    model (keras.model): ConvNet with classification layer removed.
+    """
     data = db.query(db_manager.Poster)
     n_posters = data.count()
     for i, poster in enumerate(data):
@@ -41,6 +48,8 @@ def get_features(model, db):
 
 
 def load_model(config):
+    """ Load the weights of a pretrained ConvNet
+    """
     if config['features']['model'] == 'vgg16':
         return VGG16(weights='imagenet', include_top=False)
 
