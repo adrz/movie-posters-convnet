@@ -1,11 +1,12 @@
-import unittest
-import os
+# -*- coding: utf-8 -*-
+
 import sys
+import unittest
+
+from src.get_posters import (download_poster, get_title_display,
+                             get_yearly_url_imgs)
+
 sys.path.append('src')
-from src.get_posters import (get_yearly_url_imgs,
-                             download_poster, get_title_display)
-from src.utils import create_folder
-import shutil
 
 
 class UtilsGetPosters(unittest.TestCase):

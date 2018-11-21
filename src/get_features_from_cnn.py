@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import argparse
-import numpy as np
+import sys
 from functools import reduce
 from operator import mul
 
-from keras.preprocessing import image
-from keras.applications.imagenet_utils import preprocess_input
-from keras.applications.vgg16 import VGG16
-from keras.applications.resnet50 import ResNet50
+import numpy as np
 
-import utils
 import db_manager
-
+import utils
+from keras.applications.imagenet_utils import preprocess_input
+from keras.applications.resnet50 import ResNet50
+from keras.applications.vgg16 import VGG16
+from keras.preprocessing import image
 
 img_width = 224
 img_height = 224
@@ -22,13 +21,21 @@ img_height = 224
 
 # Feature extractor
 def get_features(model, db):
+    """ Extract the last layer of a ConvNet and push it to a database.
+    The last layer (classification layer) is removed, and the output of the following
+    ConvNet now return a set of features. This technique is often referred as ``transfert learning''.
+
+    Parameters
+    ----------
+    model (keras.model): ConvNet with classification layer removed.
+    """
     data = db.query(db_manager.Poster)
     n_posters = data.count()
     for i, poster in enumerate(data):
         print('getting features for {} {}/{}'.format(
             poster.path_img, i+1, n_posters))
         # Resize image to be 224x224
-        img = utils.load_img(poster.base64_img,
+        img = image.load_img(poster.path_img,
                              target_size=(img_width, img_height))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
@@ -41,6 +48,8 @@ def get_features(model, db):
 
 
 def load_model(config):
+    """ Load the weights of a pretrained ConvNet
+    """
     if config['features']['model'] == 'vgg16':
         return VGG16(weights='imagenet', include_top=False)
 
@@ -55,6 +64,7 @@ def main(argv):
                         default="./config/development.conf")
     args = parser.parse_args()
     config = utils.read_config(args.config)
+
     # Load VGG16, guys you better have a GPU...
     model = load_model(config)
     db = db_manager.get_db(config['general']['db_uri'])

@@ -1,8 +1,3 @@
-myData = [];
-map_id_title = {};
-
-url_www = 'http://51.15.248.42/';
-
 
 function updatePosters(event){
     var title = $('input:first').val();
@@ -13,10 +8,10 @@ function updatePosters(event){
 function updatePage() {
     $('input:first').val(myData[0].title_display);
     console.log(myData[0].url_img);
-    $("#poster-img").attr("src", url_www+'data/posters/'+(myData[0].id-1) + '.jpg');
+    $("#poster-img").attr("src", url_www+'static/'+(myData[0].path_img));
     for (var i = 1; i < 7; i++)
     {
-	$("#poster-img"+i).attr("src", url_www+'data/posters/'+(myData[i].id-1)+'.jpg');
+	$("#poster-img"+i).attr("src", url_www+'static/'+(myData[i].path_img));
     }
 }
 
@@ -27,13 +22,17 @@ $( "form" ).submit(function( event ) {
 
 function click_img(num) {
     retrieve_movie(myData[num].id);
-}
+};
 
 document.getElementById('random').onclick = function() {
+    random_movie();
+};
+
+function random_movie() {
     n_movies = Object.keys(map_id_title).length;
     var idx_rnd = Math.floor((Math.random() * n_movies));
     retrieve_movie(idx_rnd);
-}
+};
 
 $body = $("body");
 
@@ -43,7 +42,6 @@ $(document).on({
     ajaxStop: function() { $body.removeClass("loading"); }    
 });
 
-url_api = 'http://51.15.248.42/v1/';
 
 $(document).ready(function() {
     crossDomain: true;
@@ -70,7 +68,6 @@ function retrieve_movie(id) {
         url: url,
 	dataType: "json",
         success: function(data) {
-            //geoData = data;
             myData = data;
         },
         complete: function() {

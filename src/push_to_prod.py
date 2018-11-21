@@ -1,12 +1,16 @@
-from db_manager import (get_db, PosterWeb, Poster)
+from db_manager import (get_db, PosterWeb, Poster, drop_posterweb)
 from utils import create_folder
 from PIL import Image as pil_image
 from io import BytesIO
 import base64
 
 
-def create_db_prod(uri_db_dev, uri_db_prod, path_img, path_thumb):
+def copy_db_dev_prod(uri_db_dev, uri_db_prod):
     db_dev = get_db(uri_db_dev)
+    db_prod = get_db(uri_db_prod)
+
+    # PosterWeb.__table__.drop(db_prod)
+    drop_posterweb(uri_db_prod)
     db_prod = get_db(uri_db_prod)
 
     data_dev = db_dev.query(Poster.id,
@@ -19,6 +23,11 @@ def create_db_prod(uri_db_dev, uri_db_prod, path_img, path_thumb):
 
     db_prod.bulk_save_objects(data_prod)
     db_prod.commit()
+
+
+def create_db_prod(uri_db_dev, uri_db_prod, path_img, path_thumb):
+    copy_db_dev_prod(uri_db_dev, uri_db_prod)
+    db_dev = get_db(uri_db_dev)
     create_folder(path_img)
     create_folder(path_thumb)
 

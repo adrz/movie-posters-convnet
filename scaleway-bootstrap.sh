@@ -1,4 +1,4 @@
-v=$(scw images --no-trunc=true | grep image-movieposters)
+v=$(scw images --no-trunc=true | grep movieposters)
 imageid=$(echo $v | awk '{print $3}')
 
 # for i in {1..3}; do
@@ -21,7 +21,7 @@ scw create --commercial-type=VC1S --name haproxy ubuntu-xenial
 sleep 30
 scw start haproxy
 
-while ! [ $(scw ps|grep haproxy|awk '{ print $6 }') = "running" ]; do
+while ! [[ $(scw ps|grep haproxy|awk '{ print $6 }') = "running" ]]; do
     sleep 20
     scw start haproxy
 done
@@ -43,9 +43,9 @@ sleep 10
 
 
 cp haproxy.cfg haproxy_boot.cfg
-for i in {1..3}; do
-    privateip=$(scw exec --gateway=haproxy www-$i ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
-    echo "	server web$i.local  $privateip:80">> haproxy_boot.cfg
+for i in {1..2}; do
+    privateip=$(scw inspect server:www-$i|grep private_ip|awk '{match($0,/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/); ip = substr($0,RSTART,RLENGTH); print ip}')
+    echo "server web$i.local  $privateip:80">> haproxy_boot.cfg
 done
 
 cat haproxy_boot.cfg | scw exec haproxy 'cat > /etc/haproxy/haproxy.cfg'

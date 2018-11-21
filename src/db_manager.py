@@ -1,12 +1,14 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.schema import Column
-from sqlalchemy.types import Integer, String, BINARY, TypeDecorator
-import sqlite3
+# -*- coding: utf-8 -*-
+
 import io
-from sqlalchemy.ext.declarative import declarative_base
+import sqlite3
 
 import numpy as np
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.schema import Column
+from sqlalchemy.types import BINARY, Integer, String, TypeDecorator
 
 Base = declarative_base()
 
@@ -58,8 +60,6 @@ class Poster(Base):
     features_pca = Column(ARRAY, nullable=True)
     closest_posters = Column(String, nullable=True)
     title_display = Column(String, nullable=True)
-    base64_img = Column(String, nullable=True)
-    base64_thumb = Column(String, nullable=True)
 
     def __init__(self, dict_poster=None):
         if dict_poster is None:
@@ -73,8 +73,6 @@ class Poster(Base):
             self.features_pca = dict_poster.get('features_pca', '')
             self.closest_posters = dict_poster.get('closest_posters', '')
             self.title_display = dict_poster.get('title_display', '')
-            self.base64_img = dict_poster.get('base64_img', '')
-            self.base64_thumb = dict_poster.get('base64_thumb', '')
 
 
 class PosterWeb(Base):
@@ -83,10 +81,11 @@ class PosterWeb(Base):
     closest_posters = Column(String, nullable=True)
     title_display = Column(String, nullable=True)
 
-    def __init__(self, id, closest_posters, title_display):
+    def __init__(self, id, closest_posters, title_display, path_img):
         self.id = id
         self.closest_posters = closest_posters
         self.title_display = title_display
+        self.path_img = path_img
 
 
 def get_db(uri):
@@ -98,6 +97,11 @@ def get_db(uri):
     Session = sessionmaker(bind=engine)
     session = Session()
     return session
+
+
+def drop_posterweb(uri):
+    engine = create_engine(uri)
+    PosterWeb.__table__.drop(engine)
 
 
 def get_all_data(uri):

@@ -2,19 +2,29 @@
 # -*- coding: utf-8 -*-
 
 
+import argparse
+import sys
+
+import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-import sys
-import argparse
 
-import utils
 import db_manager
+import utils
 from db_manager import Poster
 
 
-def scale_coords(coords, width=800, height=800):
-    """ Scale the coordinate to fit within a specific range
+def scale_coords(coords: np.array, width: int=800, height: int=800) -> list:
+    """ Scale the coordinates to fit within a specific range
+
+    Parameters
+    ----------
+    coords (np.array or list): coordinates to be scaled
+    width (int): width limit
+    height (int): height limit
+
+    Returns:
+    scaled (list): list of coordinates all in $[0, width]x[0, height]$
     """
     minx, miny = min(coords[:, 0]), min(coords[:, 1])
     maxx, maxy = max(coords[:, 0]), max(coords[:, 1])
@@ -28,7 +38,7 @@ def scale_coords(coords, width=800, height=800):
     return scaled
 
 
-def get_PCA_features(data, n_components):
+def get_pca_features(data: list, n_components: int) -> np.array:
     """ Dimensional reduction of the features
     """
     features = np.array([x.features for x in data])
@@ -39,15 +49,19 @@ def get_PCA_features(data, n_components):
 
 # Function getting the closest 6 movie posters for all the movie posters
 # Far from being a beautiful code...
-def get_closest_features(data, db, config):
+def get_closest_features(data: list, db, config):
     """ Compute PCA and use cosine_similarity to compute "distance"
     between each posters
     """
-    X = get_PCA_features(data, config['features']['pca_n_components'])
+    X = get_pca_features(data, config['features']['pca_n_components'])
 
     # Could become HUGE !
+    # Don't forget that cosine_similarity will compute a NxN matrix
+    # with N as the number of posters
     X_cosine = cosine_similarity(X)
 
+    # Diagonal values of X_cosine are 1s (a poster is of course identical to itself)
+    # As we are looking for the closest posters except itself, we set the diagonal values to 0s
     np.fill_diagonal(X_cosine, 0)
 
     # The largest the cosine similarity, the closest the features are
@@ -55,12 +69,30 @@ def get_closest_features(data, db, config):
     idx_bests = idx_bests[:, ::-1]
     idx_keep = idx_bests[:, 0:6]
 
+    # Push the data to db
     for d, idxs in zip(data, idx_keep):
-        d.closest_posters = ','.join(map(str, idxs+1))
+        ids = [data[j].id for j in idxs]
+        d.closest_posters = ','.join(map(str, ids))
+        # x = db.query(Poster).filter_by(id=d.id).first()
+        # x.closest_posters = closest_posters
 
     db.commit()
-
     return True
+
+
+def get_2d_features(data, db, config):
+    """ Uniform Manifold Approximation and Projection
+    see: https://arxiv.org/abs/1802.03426
+    """
+    import umap
+    features = np.array([x.features for x in data])
+    embedding = umap.UMAP(n_neighbors=30,
+                          min_dist=0.3,
+                          metric='cosine').fit_transform(features)
+    embedding = np.array(scale_coords(embedding, width=1024, height=500))
+    for d, f in zip(data, embedding):
+        d.features_pca = f
+    db.commit()
 
 # def process_features_tsne(df, n_samples=2000,
 #                           perplexity=40, n_jobs=2,
@@ -101,11 +133,10 @@ def main(argv):
                         default="./config/development.conf")
     args = parser.parse_args()
     config = utils.read_config(args.config)
-    data, db = db_manager.get_all_data(config['general']['db_uri'])
 
     db = db_manager.get_db(config['general']['db_uri'])
 
-    data = db.query(Poster).order_by(Poster.id)
+    data = db.query(Poster).all()
 
     data_features = get_closest_features(data, db, config)
     print(data_features)

@@ -14,6 +14,12 @@ import urllib
 from multiprocessing import Pool
 import json
 
+"""
+Not used in the current project. This was aimed to extract some relevant imdb information related
+to the movie. For example I'd plan on trying to predict the rating from the poster.
+"""
+
+
 def get_imdb_link(url):
     try:
         r = request.urlopen(url).read()
@@ -37,7 +43,6 @@ def get_omdb_api(url):
     except:
         to_return = []
     return to_return
-
 
 
 def put_imdb(df, data_movies):
@@ -66,8 +71,8 @@ def main(argv):
                         help='input file with urls of posters',
                         default='./cnn_posters.p')
     parser.add_argument('-o', '--output_file',
-                       help='output pickle file',
-                       default='./cnn_posters_imdb.p')
+                        help='output pickle file',
+                        default='./cnn_posters_imdb.p')
     parser.add_argument('-n', '--nproc', type=int,
                         help="number of processus (default 2)",
                         default=2)
@@ -86,7 +91,7 @@ def main(argv):
     df['imdb_link'] = imdb_links
     df['title'] = titles
 
-    df = df[df.imdb_link!=''].reset_index()
+    df = df[df.imdb_link != ''].reset_index()
 
     imdb_links = pd.Series(df.imdb_link.unique())
     imdb_links = imdb_links.str.replace('http://www.imdb.com/title/', 'http://www.omdbapi.com/?i=')
@@ -101,6 +106,7 @@ def main(argv):
 
     df = pd.merge(df, df_imdb, on='imdbID')
     pickle.dump(df, open(args.output_file, 'wb'))
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])

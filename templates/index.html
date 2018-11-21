@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
+    <!-- <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script> -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css" />
     
-    <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
+    <!-- <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.js"></script>
     <link rel="stylesheet"
 	  href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" />
     <link rel="stylesheet"
 	  href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css" />
-    
-    <link rel="stylesheet" href="js/milligram.css" />
-    
-    <script src="js/plot3.js"></script>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/custom.css') }}" />    
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/milligram.css') }}" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   </head>
   <body>
 
@@ -35,7 +34,7 @@
 	    </div>
 	  </div>
 	</div>
-
+	
 	<div class="column column-66">
 	  <div class="row">
 	    <h3>Similar Posters: </h3>
@@ -47,7 +46,7 @@
 	      <!-- </div> -->
 	      <div class="row">
 		<div class="img1">
-		  <img id="poster-img1" src="", onclick=click_img('1') />
+		  <img id="poster-img1" src="", onclick=click_img(1) />
 		</div>
 	      </div>
 	    </div>
@@ -58,7 +57,7 @@
 	      <!-- </div> -->
 	      <div class="row">
 		<div class="img2">
-		  <img id="poster-img2" src="", onclick=click_img('2') />
+		  <img id="poster-img2" src="", onclick=click_img(2) />
 		</div>
 	      </div>
 	    </div>
@@ -82,7 +81,7 @@
 	      <!-- </div> -->
 	      <div class="row">
 		<div class="img4">
-		  <img id="poster-img4" src="", onclick=click_img('4') />
+		  <img id="poster-img4" src="", onclick=click_img(4) />
 		</div>
 	      </div>
 	    </div>
@@ -93,7 +92,7 @@
 	      <!-- </div> -->
 	      <div class="row">
 		<div class="img5">
-		  <img id="poster-img5" src="", onclick=click_img('5') />
+		  <img id="poster-img5" src="", onclick=click_img(5) />
 		</div>
 	      </div>
 	    </div>
@@ -104,7 +103,7 @@
 	      <!-- </div> -->
 	      <div class="row">
 		<div class="img6">
-		  <img id="poster-img6" src="", onclick=click_img('6') />
+		  <img id="poster-img6" src="", onclick=click_img(6) />
 		</div>
 	      </div>
 	    </div>
@@ -145,12 +144,11 @@
 		       title="MIT License">MIT License</a>.</p>
 	<p>
 	  If you want to know more about how it works 
-	  </p>
+	</p>
       </div>
     </div>
-    
-</div>
-
-
-</body>
+    <div class="modal"></div>
+  </body>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vars.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/plot3.js') }}"></script>
 </html>
