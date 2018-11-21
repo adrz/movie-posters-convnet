@@ -52,25 +52,24 @@ $(document).ready(function() {
         success: function(data) {
             //geoData = data;
             map_id_title = data;
-	    new autoComplete({
-		selector: 'input[name="q"]',
-		minChars: 2,
-		source: function(term, suggest){
-		    term = term.toLowerCase();
-		    var choices = Object.keys(map_id_title);
-		    var matches = [];
-		    for (i=0; i<choices.length; i++)
-			if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
-		    a        suggest(matches);
-		}
-	    });
 	},
         complete: function() {
             //setTimeout(loadData, 1000);
         }
     });
-
-    retrieve_movie(222);
+    retrieve_movie(2222);
+    new autoComplete({
+	selector: 'input[name="q"]',
+	minChars: 1,
+	source: function(term, suggest){
+	    term = term.toLowerCase();
+	    var choices = Object.keys(map_id_title);
+	    var matches = [];
+	    for (i=0; i<choices.length; i++)
+		if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
+	    suggest(matches);
+	}
+    });
 });
 
 function retrieve_movie(id) {
