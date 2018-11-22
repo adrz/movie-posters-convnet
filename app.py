@@ -9,6 +9,9 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 import os
 from flask_cache import Cache
 import numpy as np
+from flask import request
+import urllib
+
 
 appli = Flask(__name__)
 CORS(appli)
@@ -19,6 +22,13 @@ cache = Cache(appli, config={'CACHE_TYPE': 'redis',
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
+
+def cache_key():
+    args = request.args
+    key = request.path + '?' + urllib.urlencode([
+        (k, v) for k in sorted(args) for v in sorted(args.getlist(k))
+    ])
+    return key
 
 class ApiPosters(Resource):
     def __init__(self, path_config='./config/production.conf'):
@@ -34,7 +44,7 @@ class ApiPosters(Resource):
             result = self.db.query(*fields).filter_by(id=id).first()._asdict()
         return result
 
-    @cache.memoize(60)
+    @cache.cached(timeout=60, key_prefix=cache_key)
     def get(self, id):
         """ Retrieve the movie poster with specific id along with
         its closest movie posters
