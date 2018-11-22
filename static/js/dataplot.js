@@ -19,8 +19,8 @@ function updatePage() {
 //     updatePosters(event);
 // });
 
-document.getElementById('random').onclick = function() {
-    updatePosters();
+document.getElementById('submit').onclick = function(event) {
+    updatePosters(event);
 };
 
 function click_img(num) {
