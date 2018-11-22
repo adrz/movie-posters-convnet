@@ -31,6 +31,10 @@ Base = declarative_base()
 
 
 class ARRAY(TypeDecorator):
+    """ Allow us to store np.array into postgresql
+    It push the np.array as a string
+    It retrieve the string and convert it back to an np.array
+    """
     impl = String
 
     def process_bind_param(self, value, dialect):
