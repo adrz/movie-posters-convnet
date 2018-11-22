@@ -1,12 +1,9 @@
 // https://github.com/douglasbagnall/image-tsne
 
-var scale_x = d3.scaleLinear().domain([0, 800]).range([0, 1024*2]);
-var scale_y = d3.scaleLinear().domain([0, 800]).range([0, 1024*2]);
-
 var svg;
 var zoom;
 
-function plot(json, size){
+function plot(json, scale_x, scale_y, size){
     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
     // var svg = d3.select("div.w3-twothird")
@@ -127,7 +124,20 @@ $(document).ready(function() {
 	    console.log('success madafaka');
 	    myData = data;
 	    subset = data; //getRandomSubarray(data, 2000);
-	    plot(subset, [40, 40]);
+	    m_x = [];
+            m_y = [];
+            for (i=0; i<subset.length; i++) {
+                m_x.push(subset[i]['xy'][0]);
+                m_y.push(subset[i]['xy'][1]);
+            }
+            min_x = Math.min.apply(null, m_x);
+            max_x = Math.max.apply(null, m_x);
+            min_y = Math.min.apply(null, m_y);
+            max_y = Math.max.apply(null, m_y);
+            var scale_x = d3.scaleLinear().domain([min_x, max_x]).range([0, 1024*2]);
+            var scale_y = d3.scaleLinear().domain([min_y, max_y]).range([0, 1024*2]);
+
+	    plot(subset, scale_x, scale_y, [40, 40]);
 	},
         complete: function() {
             //setTimeout(loadData, 1000);
