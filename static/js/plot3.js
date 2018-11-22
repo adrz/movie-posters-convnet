@@ -1,7 +1,7 @@
 // https://github.com/douglasbagnall/image-tsne
 
-var scale_x = d3.scaleLinear().domain([0, 1024]).range([0, 1024*2]);
-var scale_y = d3.scaleLinear().domain([0, 500]).range([0, 1024*2]);
+var scale_x = d3.scaleLinear().domain([0, 800]).range([0, 1024]);
+var scale_y = d3.scaleLinear().domain([0, 800]).range([0, 500]);
 
 var svg;
 var zoom;
