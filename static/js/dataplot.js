@@ -24,12 +24,13 @@ function click_img(num) {
     retrieve_movie(myData[num].id);
 };
 
-document.getElementById('random').onclick = function() {
-    random_movie();
-};
+// document.getElementById('random').onclick = function() {
+//     random_movie();
+// };
+
+n_movies = 0;
 
 function random_movie() {
-    n_movies = Object.keys(map_id_title).length;
     var idx_rnd = Math.floor((Math.random() * n_movies));
     retrieve_movie(idx_rnd);
 };
@@ -52,6 +53,7 @@ $(document).ready(function() {
         success: function(data) {
             //geoData = data;
             map_id_title = data;
+	    n_movies = Object.keys(map_id_title).length;
 	},
         complete: function() {
             //setTimeout(loadData, 1000);
