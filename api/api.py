@@ -5,6 +5,7 @@ from src.utils import read_config
 from flask_restful import Resource
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 import os
+import numpy as np
 
 
 class ApiPosters(Resource):
@@ -33,10 +34,13 @@ class ApiPosters(Resource):
             fields = (Poster.id,
                       Poster.features_pca,
                       Poster.path_thumb)
+            my_query = self.db.query(*fields).filter(~Poster.path_img.contains('ver'))
+            n_data = my_query.count()
+            idx_rnd = np.random.choice(range(n_data), 2000, replace=False)
+            all_data = my_query.all()
+            rnd_data = [all_data[i] for i in idx_rnd]
             data = [{'id': x[0], 'xy': list(x[1]), 'thumb': x[2]}
-                    for x in self.db
-                    .query(*fields)
-                    .filter(~Poster.path_img.contains('ver')).all()]
+                    for x in rnd_data]
         else:
             id = int(id)
             print('movie id: {}'.format(id))

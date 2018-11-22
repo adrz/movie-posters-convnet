@@ -1,7 +1,7 @@
 // https://github.com/douglasbagnall/image-tsne
 
-var scale_x = d3.scaleLinear().domain([0, 800]).range([0, 1024]);
-var scale_y = d3.scaleLinear().domain([0, 800]).range([0, 500]);
+var scale_x = d3.scaleLinear().domain([0, 800]).range([0, 1024*2]);
+var scale_y = d3.scaleLinear().domain([0, 800]).range([0, 1024*2]);
 
 var svg;
 var zoom;
@@ -70,7 +70,7 @@ function click_img(num) {
 
 function updatePage() {
     $('input:first').val(dataClicked[0].title_display);
-    console.log(myData[0].url_img);
+    // console.log(myData[0].url_img);
     $("#poster-img").attr("src", url_www+'static/'+(dataClicked[0].path_img));
     for (var i = 1; i < 7; i++)
     {
@@ -126,7 +126,7 @@ $(document).ready(function() {
         success: function(data) {
 	    console.log('success madafaka');
 	    myData = data;
-	    subset = getRandomSubarray(data, 2000);
+	    subset = data; //getRandomSubarray(data, 2000);
 	    plot(subset, [40, 40]);
 	},
         complete: function() {
