@@ -15,10 +15,13 @@ function updatePage() {
     }
 }
 
-$( "form" ).submit(function( event ) {
-    updatePosters(event);
-});
+// $( "form" ).submit(function( event ) {
+//     updatePosters(event);
+// });
 
+document.getElementById('random').onclick = function() {
+    updatePosters();
+};
 
 function click_img(num) {
     retrieve_movie(myData[num].id);
