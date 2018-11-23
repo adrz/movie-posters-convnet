@@ -87,43 +87,13 @@ def get_2d_features(data, db, config):
     import umap
     features = np.array([x.features for x in data])
     embedding = umap.UMAP(n_neighbors=30,
-                          min_dist=0.3,
+                          min_dist=0.3, n_components=500,
                           metric='cosine').fit_transform(features)
     embedding = np.array(scale_coords(embedding, width=1024, height=500))
     for d, f in zip(data, embedding):
         d.features_pca = f
     db.commit()
-
-# def process_features_tsne(df, n_samples=2000,
-#                           perplexity=40, n_jobs=2,
-#                           output_file, tsne_alg='sklearn'):
-#     df_json = df.sample(n_samples)
-#     # n_components fixed to 200
-#     pca = PCA(n_components=200, whiten=True)
-
-#     if tsne_alg == 'sklearn':
-#         tsne = TSNE(n_components=2, perplexity=perplexity)
-#     else:
-#          tsne = TSNE_multi(n_components=2, perplexity=perplexity,
-#                            n_jobs=n_jobs)
-
-#     data = np.array(list(df_json['features']))
-
-#     data = pca.fit_transform(data)
-#     data_tsne = tsne.fit_transform(data)
-
-#     scaled_data = scale_coords(data_tsne, width=1000, height=1000)
-#     scaled_data_array = np.array(scaled_data)
-#     df_json['features_visu_x'] = scaled_data_array[:,0]
-#     df_json['features_visu_y'] = scaled_data_array[:,1]
-
-#     df_json = df_json[['features_visu_x', 'features_visu_y',
-#                        'local_thumb', 'url_imgs',
-#                        'closest_1', 'closest_2', 'closest_3',
-#                        'closest_4', 'closest_5', 'closest_6',
-#                        'score_1', 'score_2', 'score_3']]
-#     json.dump(df_json.values.tolist(),
-#               open(output_file, 'w'))
+    return True
 
 
 def main(argv):
@@ -138,8 +108,9 @@ def main(argv):
 
     data = db.query(Poster).all()
 
-    data_features = get_closest_features(data, db, config)
-    print(data_features)
+    _ = get_2d_features(data, db, config)
+    _ = get_closest_features(data, db, config)
+
 
 
 if __name__ == "__main__":

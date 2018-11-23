@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import io
-import sqlite3
+# import io
+# import sqlite3
 
 import numpy as np
 from sqlalchemy import create_engine
@@ -80,19 +80,34 @@ class Poster(Base):
 
 
 class PosterWeb(Base):
+    """ One day, I thought it was a good idea to encode images in base64
+    then directly send it to the user...
+    It was kind of stupid because it made the db humongous and was
+    overly complicated ! Don't forget that static files can easily be cached !
+
+    Well anyways, this is a relic of the golden age, and i keep it to remind me of
+    my past stupidity
+    """
     __tablename__ = 'posterweb'
     id = Column(Integer, primary_key=True)
     closest_posters = Column(String, nullable=True)
     title_display = Column(String, nullable=True)
+    img_base64 = Column(String, nullable=True)
+    thumb_base64 = Column(String, nullable=True)
 
-    def __init__(self, id, closest_posters, title_display, path_img):
+    def __init__(self, id, closest_posters, title_display, path_img,
+                 thumb_base64, img_base64):
         self.id = id
         self.closest_posters = closest_posters
         self.title_display = title_display
         self.path_img = path_img
+        self.thumb_base64 = thumb_base64
+        self.img_base64 = img_base64
 
 
 def get_db(uri):
+    """ I hate postgresql, I don't know why I did that to myself
+    """
     engine = create_engine(uri)
     if not engine.dialect.has_table(engine, 'poster'):
         Base.metadata.create_all(engine)

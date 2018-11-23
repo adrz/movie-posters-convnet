@@ -65,7 +65,7 @@ def main(argv):
     args = parser.parse_args()
     config = utils.read_config(args.config)
 
-    # Load VGG16, guys you better have a GPU...
+    # Load VGG16 or ResNet50, guys you better have a GPU...
     model = load_model(config)
     db = db_manager.get_db(config['general']['db_uri'])
 

@@ -7,7 +7,6 @@ import itertools
 import re
 import sys
 from multiprocessing import Pool
-from urllib import request
 
 import requests
 from bs4 import BeautifulSoup
@@ -36,6 +35,7 @@ def get_title_display(title: str, year: int, url: str) -> str:
     ----------
     title_display (str): format "title, year, version"
     """
+
     version = re.search('_ver([0-9]{2,3}|[2-9])', url)
     if version:
         title_display = '{}, {}, v{}'.format(
@@ -60,9 +60,11 @@ def get_yearly_url_imgs(year: int) -> list:
     ----------
     dict_imgs (list): list of dictionary containing information related to the movies.
     """
+
     url = '{}{}/std.html'.format(URL_IMPAWARDS,
                                  year)
-    r = request.urlopen(url).read()
+    # r = request.urlopen(url).read()
+    r = requests.get(url).text
     soup = BeautifulSoup(r, 'lxml')
 
     # Find all trs
