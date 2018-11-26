@@ -37,20 +37,6 @@ class DbManagerTest(unittest.TestCase):
 
         self.assertTrue(dict_poster_b == dict_poster)
 
-    def test_PosterWeb(self):
-        poster_b = PosterWeb(1, 'blabla', 'blablabla', 'dumdum')
-
-        self.assertTrue(isinstance(
-            poster_b, Base))
-
-        dict_poster = {'id': 1,
-                       'closest_posters': 'blabla',
-                       'title_display': 'blablabla',
-                       'path_img': 'dumdum'}
-        dict_poster_b = poster_b.__dict__
-        del(dict_poster_b['_sa_instance_state'])
-        self.assertTrue(dict_poster_b == dict_poster)
-
     def test_read_write_Poster(self):
         db = get_db('sqlite://')
         dict_poster = {'title': 'mytitle',
