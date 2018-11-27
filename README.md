@@ -20,8 +20,6 @@ This project is divided into 3 main scripts:
 To get parameters descriptions:
 * python src/get_XXX.py --help
 
-# Setup
-
 ## Requirements
 
 ### OS
@@ -67,20 +65,23 @@ $ psql -U postgres -c "grant all privileges on database movieposters to moviepos
 
 # Usage
 
-w## Computation
+## Computation
 After cloning you can just launch the bash script that will:
 * download posters from 1920 to 2016
 * compute features
+* compute the datavisualization features
 
 ```sh
-$ chmox +x run-posters-cnn.sh
-$ ./run-posters-cnn.sh
+$ python src/get_posters.py -c config/development.conf
+$ python src/get_get_features_from_cnn.py -c config/development.conf
+$ python src/get_data_visu.py -c config/development.conf
 ```
 
 Then grab a coffee...
 
 ## Visualization
 ```sh
+$ source env/bin/activate
 $ configapi=./config/development.conf
 $ python app.py
 ```
@@ -230,8 +231,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 <!-- sudo service nginx restart -->
 <!-- ### Bootstrap: -->
 <!-- scw exec ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 -->
-
-
-
-
-
