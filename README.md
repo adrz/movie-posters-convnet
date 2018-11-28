@@ -2,6 +2,11 @@
 Status](https://travis-ci.org/adrz/movie-posters-convnet.svg?branch=master)](https://travis-ci.org/adrz/movie-posters-convnet)
 [![codecov](https://codecov.io/gh/adrz/movie-posters-convnet/branch/master/graph/badge.svg)](https://codecov.io/gh/adrz/movie-posters-convnet)
 
+# Demo
+
+* [Search Engine](https://movies.iwoaf.com/index_complete.html)
+* [2D scatter plot](https://movies.iwoaf.com)
+
 # Overview
 
 Unsupervised clustering of movie posters with features extracted from Convolutional Neural
