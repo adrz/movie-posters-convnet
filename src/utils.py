@@ -4,7 +4,7 @@ import configparser
 import os
 
 
-def read_config(config_path: str='./config/development.conf') -> dict:
+def read_config(config_path: str = './config/development.conf') -> dict:
     """ Extract configuration from a file
 
     Parameters

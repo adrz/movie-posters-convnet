@@ -65,7 +65,7 @@ def get_yearly_url_imgs(year: int) -> list:
                                  year)
     # r = request.urlopen(url).read()
     r = requests.get(url).text
-    soup = BeautifulSoup(r, 'lxml')
+    soup = BeautifulSoup(r)
 
     # Find all trs
     trs = soup.find_all('tr')
@@ -100,7 +100,7 @@ def get_yearly_url_imgs(year: int) -> list:
     return dict_imgs
 
 
-def download_poster(link: str, size_thumb: tuple=(100, 100)) -> tuple:
+def download_poster(link: str, size_thumb: tuple = (100, 100)) -> tuple:
     """
     Download the poster and create a thumbnail
 
@@ -153,6 +153,8 @@ def main(argv):
         yearly_urls = p.map(get_yearly_url_imgs, years)
     yearly_urls = list(itertools.chain.from_iterable(yearly_urls))
 
+    import pickle
+    pickle.dump(yearly_urls, open("yearly_urls.p", "wb"))
     # push to db
     session = db_manager.get_db(config['general']['db_uri'])
     objects = [db_manager.Poster(x) for x in yearly_urls]
